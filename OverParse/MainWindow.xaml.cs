@@ -102,7 +102,8 @@ namespace OverParse
             catch
             {
                 Console.WriteLine("Hotkeys failed to initialize");
-                MessageBox.Show("OverParse failed to initialize hotkeys. This is usually because something else is already using them.\n\nThe program will still work, but hotkeys will not function. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("OverParse failed to initialize hotkeys. This is usually because something else is already using them.\n\nThe program will still work, but hotkeys will not function. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("OverParseはホットキーの初期化に失敗しました。 ほかのアプリケーションと競合している可能性があります。\n\nアプリケーションは動作しますが、ホットキーは機能しません。\nご迷惑をお掛けして申し訳ありません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
 
@@ -160,7 +161,8 @@ namespace OverParse
                 Console.WriteLine($"JSON version: {responseVersion} / Assembly version: {thisVersion}");
                 if (responseVersion != thisVersion)
                 {
-                    MessageBoxResult result = MessageBox.Show($"There's a new version of OverParse available!\n\nYou're running version {thisVersion}. The latest version is version {responseVersion}.\n\nWould you like to download it now from GitHub?", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                    //MessageBoxResult result = MessageBox.Show($"There's a new version of OverParse available!\n\nYou're running version {thisVersion}. The latest version is version {responseVersion}.\n\nWould you like to download it now from GitHub?", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                    MessageBoxResult result = MessageBox.Show($"新しいバージョンのOverParse{responseVersion}が利用可能です!\n\n現在使用中のバージョンはOverParse{thisVersion}です。\n\nGitHubから新しいバージョンをダウンロードしますか？", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
                     if (result == MessageBoxResult.Yes)
                     {
                         Process.Start("https://github.com/TyroneSama/OverParse/releases/latest");
@@ -382,7 +384,8 @@ namespace OverParse
                 Combatant reorder = null;
                 foreach (Combatant c in encounterlog.combatants)
                 {
-                    if (c.Name == "Zanverse")
+                    //if (c.Name == "Zanverse")
+                    if (c.Name == "ザンバース")
                     {
                         index = encounterlog.combatants.IndexOf(c);
                         reorder = c;
@@ -485,7 +488,8 @@ namespace OverParse
             AlwaysOnTop.IsChecked = false;
 
             int x;
-            string input = Microsoft.VisualBasic.Interaction.InputBox("How many seconds should the system wait before stopping an encounter?", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
+            //string input = Microsoft.VisualBasic.Interaction.InputBox("How many seconds should the system wait before stopping an encounter?", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
+            string input = Microsoft.VisualBasic.Interaction.InputBox("戦闘終了後何秒でエンカウントデータをリセットしますか？", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
             if (Int32.TryParse(input, out x))
             {
                 if (x > 0)
@@ -516,7 +520,8 @@ namespace OverParse
         private void About_Click(object sender, RoutedEventArgs e)
         {
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            MessageBox.Show($"OverParse v{version}\nAnything and everything may be broken.\n\nPlease use damage information responsibly.", "OverParse");
+            //MessageBox.Show($"OverParse v{version}\nAnything and everything may be broken.\n\nPlease use damage information responsibly.", "OverParse");
+            MessageBox.Show($"OverParse v{version}\nこのアプリケーションを使用したことによって生じたいかなる損害・HDDバースト等に関しては作者は一切の責任を負いません。\n\n自己責任の上で使用して下さい。", "OverParse");
         }
 
         private void Website_Click(object sender, RoutedEventArgs e)
