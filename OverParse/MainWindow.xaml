@@ -78,34 +78,48 @@
                             <MenuItem Style="{StaticResource topmenu}" x:Name="MenuSystem" Background="Transparent" Header="Encounter">
                                 <MenuItem Style="{StaticResource submenu}" Header="End encounter" x:Name="EndEncounter" InputGestureText="Ctrl+Shift+E" Click="EndEncounter_Click"/>
                                 <Separator />
-                                <MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="Automatically end encounters" Click="AutoEndEncounters_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="Set encounter timeout..." Click="SetEncounterTimeout_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="Automatically end encounters" Click="AutoEndEncounters_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="計測を自動でリセット" Click="AutoEndEncounters_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="Set encounter timeout..." Click="SetEncounterTimeout_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="戦闘継続時間の設定" Click="SetEncounterTimeout_Click"/>
                                 <Separator />
-                                <MenuItem Style="{StaticResource submenu}" x:Name="LogToClipboard" IsCheckable="True" IsChecked="True" Header="Log results to clipboard" Click="LogToClipboard_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" x:Name="LogToClipboard" IsCheckable="True" IsChecked="True" Header="Log results to clipboard" Click="LogToClipboard_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" x:Name="LogToClipboard" IsCheckable="True" IsChecked="True" Header="クリップボードに結果を出力" Click="LogToClipboard_Click"/>
                                 <Separator />
                                 <MenuItem Style="{StaticResource submenu}" Header="Open logs folder..." Click="OpenLogsFolder_Click"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Display">
-                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Show only players" x:Name="FilterPlayers"/>
-                                <MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="Show raw DPS" Click="ShowRawDPS_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="Show Zanverse damage separately" Click="SeparateZanverse_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Show damage graph" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Show only players" x:Name="FilterPlayers"/>-->
+                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="プレイヤーのみを表示" x:Name="FilterPlayers"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="Show raw DPS" Click="ShowRawDPS_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="純粋なDPSを表示" Click="ShowRawDPS_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="Show Zanverse damage separately" Click="SeparateZanverse_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="ザンバースのダメージを分けて表示" Click="SeparateZanverse_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Show damage graph" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="ダメージグラフを表示" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
                                 <Separator />
-                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Compact mode" x:Name="CompactMode" Click="CompactMode_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" Header="Window opacity">
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Compact mode" x:Name="CompactMode" Click="CompactMode_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="コンパクトモード" x:Name="CompactMode" Click="CompactMode_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Window opacity">-->
+                                <MenuItem Style="{StaticResource submenu}" Header="ウィンドウの透過率">
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_0" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Transparent" Click="Opacity_0_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_25" IsCheckable="True" IsChecked="False" Header="25%" Click="Opacity_25_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_50" IsCheckable="True" IsChecked="False" Header="50%" Click="Opacity_50_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_75" IsCheckable="True" IsChecked="True" Header="75%" Click="Opacity_75_Click" />
-                                    <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_100" IsCheckable="True" IsChecked="False" Header="Opaque" Click="Opacity_100_Click" />
+                                    <!--<MenuItem Style="{StaticResource submenu}" x:Name="Opacity_100" IsCheckable="True" IsChecked="False" Header="Opaque" Click="Opacity_100_Click" />-->
+                                    <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_100" IsCheckable="True" IsChecked="False" Header="不透明" Click="Opacity_100_Click" />
                                 </MenuItem>
-                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Always on top" x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough while inactive" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Always on top" x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="常に手前に表示" x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough while inactive" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>-->
+                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="非アクティブ時にクリックを無効" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
                             </MenuItem>
-                            <MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="Debug">
-                                <MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>
+                            <!--<MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="Debug">-->
+                            <MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="でばっぐ！">
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" Header="偽のエントリーを生成するゾ" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="うぃんどうすていたす" x:Name="WindowStats" Click="WindowStats_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="ろぐのふぁいるねーむ" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Help">
                                 <MenuItem Style="{StaticResource submenu}" Header="About" x:Name="About" Click="About_Click"/>

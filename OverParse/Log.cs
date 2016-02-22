@@ -29,10 +29,12 @@ namespace OverParse
             while (!File.Exists($"{attemptDirectory}\\pso2.exe"))
             {
                 Console.WriteLine("Invalid pso2_bin directory, prompting for new one...");
-                MessageBox.Show("Please select your pso2_bin directory.\nThis is the same folder you selected while setting up the Tweaker.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Please select your pso2_bin directory.\nThis is the same folder you selected while setting up the Tweaker.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("pso2_binディレクトリを選択してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 VistaFolderBrowserDialog oDialog = new VistaFolderBrowserDialog();
-                oDialog.Description = "Select your pso2_bin folder...";
+                //oDialog.Description = "Select your pso2_bin folder...";
+                oDialog.Description = "pso2_binフォルダを選択してください...";
                 oDialog.UseDescriptionForTitle = true;
 
                 if ((bool)oDialog.ShowDialog(Application.Current.MainWindow))
@@ -44,7 +46,8 @@ namespace OverParse
                 else
                 {
                     Console.WriteLine("Canceled out of directory picker");
-                    MessageBox.Show("OverParse needs a valid PSO2 installation to function.\nThe application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //MessageBox.Show("OverParse needs a valid PSO2 installation to function.\nThe application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("OverParseが機能するにはPSO2が必要です。\nアプリケーションを終了します。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     Application.Current.Shutdown(); // ABORT ABORT ABORT
                     break;
                 }
@@ -61,7 +64,8 @@ namespace OverParse
             {
                 Console.WriteLine("First run");
                 bool unsetFirstRun = true;
-                MessageBoxResult tweakerResult = MessageBox.Show("Do you use the PSO2 Tweaker?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                //MessageBoxResult tweakerResult = MessageBox.Show("Do you use the PSO2 Tweaker?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult tweakerResult = MessageBox.Show("PSO2 Tweakerを使用していますか?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (tweakerResult == MessageBoxResult.Yes)
                 {
                     bool warn = true;
@@ -76,7 +80,8 @@ namespace OverParse
                     if (warn)
                     {
                         Console.WriteLine("No damagelog warning");
-                        MessageBox.Show("Your PSO2 folder doesn't contain any damagelogs. This is not an error, just a reminder!\n\nPlease turn on the Damage Parser plugin in PSO2 Tweaker (orb menu > Plugins). OverParse needs this to function. You may also want to update the plugins while you're there.", "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //MessageBox.Show("Your PSO2 folder doesn't contain any damagelogs. This is not an error, just a reminder!\n\nPlease turn on the Damage Parser plugin in PSO2 Tweaker (orb menu > Plugins). OverParse needs this to function. You may also want to update the plugins while you're there.", "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("PSO2フォルダにdamagelogsがありません。 Damage Parser pluginを有効にしていますか？\n\n有効にしていない場合はPSO2 Tweakerのmenu > PluginsからDamage Parser pluginをonにしてください。 OverParseが情報を取得するために必要です。", "通知", MessageBoxButton.OK, MessageBoxImage.Information);
                         Properties.Settings.Default.FirstRun = false;
                         Properties.Settings.Default.Save();
                         return;
@@ -90,12 +95,14 @@ namespace OverParse
                     if (pluginsExist)
                     {
                         Console.WriteLine("Prompting for plugin update");
-                        selfdestructResult = MessageBox.Show("Would you like to update your plugins to the version included with OverParse?\n\nOverParse may behave unpredictably if you use a different version than it expects.", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        //selfdestructResult = MessageBox.Show("Would you like to update your plugins to the version included with OverParse?\n\nOverParse may behave unpredictably if you use a different version than it expects.", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        selfdestructResult = MessageBox.Show("OverParseに含まれているバージョンにプラグインを更新しますか？\n\n別のバーションを使用する場合、予期しない動作をすることがあります。", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     }
                     else
                     {
                         Console.WriteLine("Prompting for plugin install");
-                        selfdestructResult = MessageBox.Show("OverParse needs a Tweaker plugin to recieve its damage information.\n\nThe plugin can be installed without the Tweaker, but it won't be automatically updated, and I can't provide support for this method.\n\nDo you want to try to manually install the Damage Parser plugin?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        //selfdestructResult = MessageBox.Show("OverParse needs a Tweaker plugin to recieve its damage information.\n\nThe plugin can be installed without the Tweaker, but it won't be automatically updated, and I can't provide support for this method.\n\nDo you want to try to manually install the Damage Parser plugin?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        selfdestructResult = MessageBox.Show("OverParseは、ダメージの情報を取得するためにPSO2 Tweakerのプラグインを必要とします。\n\nプラグインは、PSO2 Tweakerを使用しなくてもインストールすることができますが、OverParseはプラグインの更新をチェックすることができないためプラグインが更新された場合、自動的に更新されることはありません。\n\n手動でDamage Parser pluginをインストールしますか?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     }
 
                     if (selfdestructResult == MessageBoxResult.No && pluginsExist)
@@ -104,7 +111,8 @@ namespace OverParse
                     if (selfdestructResult == MessageBoxResult.No && !pluginsExist)
                     {
                         Console.WriteLine("Denied plugin install");
-                        MessageBox.Show("OverParse needs the Damage Parser plugin to function.\n\nThe application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //MessageBox.Show("OverParse needs the Damage Parser plugin to function.\n\nThe application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("OverParseが機能するにはDamage Parser pluginを必要とします。\n\nアプリケーションを終了します。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                         Application.Current.Shutdown();
                         return;
                     }
@@ -117,7 +125,8 @@ namespace OverParse
                             File.Copy(Directory.GetCurrentDirectory() + "\\resources\\ddraw.dll", attemptDirectory + "\\ddraw.dll", true);
                             Directory.CreateDirectory(attemptDirectory + "\\plugins");
                             File.Copy(Directory.GetCurrentDirectory() + "\\resources\\PSO2DamageDump.dll", attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll", true);
-                            MessageBox.Show("Setup complete! A few files have been copied to your pso2_bin folder.\n\nIf PSO2 is running right now, you'll need to close it before the changes can take effect.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                            //MessageBox.Show("Setup complete! A few files have been copied to your pso2_bin folder.\n\nIf PSO2 is running right now, you'll need to close it before the changes can take effect.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                            MessageBox.Show("セットアップが完了しました！\nいくつかのファイルは、pso2_binフォルダにコピーされています。\n\nPSO2を起動している場合、変更を有効にするには、一度PSO2を終了してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                             Console.WriteLine("Plugin install successful");
                         }
                         catch (Exception ex)
@@ -369,14 +378,16 @@ namespace OverParse
                             index = -1;
                             foreach (Combatant x in combatants)
                             {
-                                if (x.ID == "94857493" && x.Name == "Zanverse")
+                                //if (x.ID == "94857493" && x.Name == "Zanverse")
+                                if (x.ID == "94857493" && x.Name == "ザンバース")
                                 {
                                     index = combatants.IndexOf(x);
                                 }
                             }
 
                             sourceID = "94857493";
-                            sourceName = "Zanverse";
+                            //sourceName = "Zanverse";
+                            sourceName = "ザンバース";
                         }
 
                         if (index == -1)
@@ -448,8 +459,9 @@ namespace OverParse
                             filtered++;
                         }
 
-                        if (x.Name == "Zanverse")
-                            zanverseCompensation = x.DPS;
+                        //if (x.Name == "Zanverse")
+                        if (x.Name == "ザンバース")
+                        zanverseCompensation = x.DPS;
                     }
 
                     float workingPartyDPS = partyDPS - zanverseCompensation;
@@ -457,7 +469,8 @@ namespace OverParse
 
                     foreach (Combatant x in combatants)
                     {
-                        if (x.isAlly && x.Name != "Zanverse")
+                        //if (x.isAlly && x.Name != "Zanverse")
+                        if (x.isAlly && x.Name != "ザンバース")
                         {
                             x.PercentDPS = (x.DPS / workingPartyDPS * 100);
                         }
