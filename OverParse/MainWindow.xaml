@@ -95,6 +95,8 @@
                                 <MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="純粋なDPSを表示" Click="ShowRawDPS_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="Show Zanverse damage separately" Click="SeparateZanverse_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="ザンバースのダメージを分けて表示" Click="SeparateZanverse_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" x:Name="SeparateAuxDamage" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Show AIS/Turret damage separately" Click="SeparateAuxDamage_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" x:Name="SeparateAuxDamage" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="AISと機銃のダメージを分けて表示" Click="SeparateAuxDamage_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Show damage graph" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="ダメージグラフを表示" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
                                 <Separator />
@@ -118,7 +120,9 @@
                             <MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="でばっぐ！">
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="偽のエントリーを生成するゾ" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="うぃんどうすていたす" x:Name="WindowStats" Click="WindowStats_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="ろぐのふぁいるねーむ" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Help">

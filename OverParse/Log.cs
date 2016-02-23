@@ -47,7 +47,7 @@ namespace OverParse
                 {
                     Console.WriteLine("Canceled out of directory picker");
                     //MessageBox.Show("OverParse needs a valid PSO2 installation to function.\nThe application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    MessageBox.Show("OverParseが機能するにはPSO2が必要です。\nアプリケーションを終了します。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("OverParseが機能するにはPSO2が必要です\nアプリケーションを終了します。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     Application.Current.Shutdown(); // ABORT ABORT ABORT
                     break;
                 }
@@ -60,7 +60,7 @@ namespace OverParse
             Console.WriteLine("Making sure pso2_bin\\damagelogs exists");
             DirectoryInfo directory = new DirectoryInfo($"{attemptDirectory}\\damagelogs");
 
-            if (Properties.Settings.Default.FirstRun)
+            if (Properties.Settings.Default.FirstRun && !Hacks.DontAsk)
             {
                 Console.WriteLine("First run");
                 bool unsetFirstRun = true;
@@ -149,6 +149,8 @@ namespace OverParse
                 }
 
             }
+
+            Hacks.DontAsk = true;
 
             if (!directory.Exists)
                 return;
@@ -360,17 +362,35 @@ namespace OverParse
                         string isMisc2 = parts[12];
                         int index = -1;
 
+                        bool isAuxDamage = false;
+
                         if (hitDamage < 1)
                             continue;
                         if (sourceID == "0" || attackID == "0")
                             continue;
-
+                        /*
+                        if (sourceName.Contains("|"))
+                        {
+                            string[] separate = sourceName.Split('|');
+                            if (Properties.Settings.Default.SeparateAuxDamage)
+                                sourceName = separate[0] + " (Aux)";
+                            else
+                                sourceName = separate[0];
+                            isAuxDamage = true;
+                        }
+                        */
                         foreach (Combatant x in combatants)
                         {
                             if (x.ID == sourceID)
                             {
                                 index = combatants.IndexOf(x);
                             }
+                            /*
+                            if (x.Name == sourceName)
+                            {
+                                if (!(!isAuxDamage && !x.isAux))
+                                    index = combatants.IndexOf(x);
+                            } */
                         }
 
                         if (attackID == "2106601422" && Properties.Settings.Default.SeparateZanverse)
@@ -397,6 +417,9 @@ namespace OverParse
                         }
 
                         Combatant source = combatants[index];
+
+                        if (!source.isAux)
+                            source.isAux = isAuxDamage;
 
                         source.Damage += hitDamage;
                         newTimestamp = int.Parse(lineTimestamp);
