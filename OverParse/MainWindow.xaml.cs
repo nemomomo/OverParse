@@ -25,6 +25,7 @@ namespace OverParse
     {
         Log encounterlog;
         public static Dictionary<string, string> skillDict = new Dictionary<string, string>();
+        List<string> sessionLogFilenames = new List<string>();
         string lastStatus = "";
         IntPtr hwndcontainer;
         protected override void OnSourceInitialized(EventArgs e)
@@ -83,6 +84,7 @@ namespace OverParse
             LogToClipboard.IsChecked = Properties.Settings.Default.LogToClipboard;
             AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop;
             SeparateAuxDamage.IsChecked = Properties.Settings.Default.SeparateAuxDamage;
+            AutoHideWindow.IsChecked = Properties.Settings.Default.AutoHideWindow;
 
             ShowDamageGraph.IsChecked = Properties.Settings.Default.ShowDamageGraph; ShowDamageGraph_Click(null, null);
             ShowRawDPS.IsChecked = Properties.Settings.Default.ShowRawDPS; ShowRawDPS_Click(null, null);
@@ -98,6 +100,7 @@ namespace OverParse
             try
             {
                 HotkeyManager.Current.AddOrReplace("End Encounter", Key.E, ModifierKeys.Control | ModifierKeys.Shift, EndEncounter_Key);
+                HotkeyManager.Current.AddOrReplace("End Encounter (No log)", Key.R, ModifierKeys.Control | ModifierKeys.Shift, EndEncounterNoLog_Key);
                 HotkeyManager.Current.AddOrReplace("Debug Menu", Key.F11, ModifierKeys.Control | ModifierKeys.Shift, DebugMenu_Key);
             }
             catch
@@ -127,6 +130,12 @@ namespace OverParse
             damageTimer.Interval = new TimeSpan(0, 0, 1);
             damageTimer.Start();
 
+            Console.WriteLine("Initializing damageTimer");
+            System.Windows.Threading.DispatcherTimer inactiveTimer = new System.Windows.Threading.DispatcherTimer();
+            inactiveTimer.Tick += new EventHandler(HideIfInactive);
+            inactiveTimer.Interval = TimeSpan.FromMilliseconds(200);
+            inactiveTimer.Start();
+
             Console.WriteLine("Initializing logCheckTimer");
             System.Windows.Threading.DispatcherTimer logCheckTimer = new System.Windows.Threading.DispatcherTimer();
             logCheckTimer.Tick += new EventHandler(CheckForNewLog);
@@ -136,7 +145,7 @@ namespace OverParse
             Console.WriteLine("Checking for release updates");
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/tyronesama/overparse/releases/latest");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/nemomomo/overparse/releases/latest");
                 request.UserAgent = "OverParse";
                 WebResponse response = request.GetResponse();
                 Stream dataStream = response.GetResponseStream();
@@ -166,13 +175,28 @@ namespace OverParse
                     MessageBoxResult result = MessageBox.Show($"新しいバージョンのOverParse v{responseVersion}が利用可能です!\n\n現在使用中のバージョンはOverParse v{thisVersion}です。\n\nGitHubから新しいバージョンをダウンロードしますか？", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
                     if (result == MessageBoxResult.Yes)
                     {
-                        Process.Start("https://github.com/TyroneSama/OverParse/releases/latest");
+                        Process.Start("https://github.com/nemomomo/OverParse/releases/latest");
                     }
                 }
             }
             catch (Exception ex) { Console.WriteLine($"Failed to update check: {ex.ToString()}"); }
 
             Console.WriteLine("End of MainWindow constructor");
+        }
+
+        private void HideIfInactive(object sender, EventArgs e)
+        {
+            if (!Properties.Settings.Default.AutoHideWindow)
+                return;
+            string title = WindowsServices.GetActiveWindowTitle();
+            if (title != "OverParse" && title != "Phantasy Star Online 2")
+            {
+                this.Opacity = 0;
+            }
+            else
+            {
+                this.Opacity = 1;
+            }
         }
 
         private void CheckForNewLog(object sender, EventArgs e)
@@ -213,11 +237,29 @@ namespace OverParse
             e.Handled = true;
         }
 
+        private void EndEncounterNoLog_Key(object sender, HotkeyEventArgs e)
+        {
+            Console.WriteLine("Encounter hotkey (no log) pressed");
+            EndEncounterNoLog_Click(null, null);
+            e.Handled = true;
+        }
+
         private void DebugMenu_Key(object sender, HotkeyEventArgs e)
         {
             Console.WriteLine("Debug hotkey pressed");
             DebugMenu.Visibility = Visibility.Visible;
             e.Handled = true;
+        }
+
+        private void AutoHideWindow_Click(object sender, RoutedEventArgs e)
+        {
+            if (AutoHideWindow.IsChecked && Properties.Settings.Default.AutoHideWindowWarning)
+            {
+                //MessageBox.Show("This will make the OverParse window invisible whenever PSO2 or OverParse are not in the foreground.\n\nTo show the window, Alt+Tab into OverParse, or click the icon on your taskbar.","OverParse Setup",MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("OverParseかPSO2が手前に表示されていない場合ウィンドウを非表示にします\n\n再度表示するにはAlt+Tabかタスクバーのアイコンをクリックしてください。","OverParse Setup",MessageBoxButton.OK,MessageBoxImage.Information);
+                Properties.Settings.Default.AutoHideWindowWarning = false;
+            }
+            Properties.Settings.Default.AutoHideWindow = AutoHideWindow.IsChecked;
         }
 
         private void SeparateAuxDamage_Click(object sender, RoutedEventArgs e)
@@ -278,7 +320,7 @@ namespace OverParse
             HandleOpacity();
         }
 
-        private void HandleOpacity()
+        public void HandleOpacity()
         {
             TheWindow.Opacity = Properties.Settings.Default.Opacity;
             // ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG
@@ -345,6 +387,7 @@ namespace OverParse
 
         private void Window_Activated(object sender, EventArgs e)
         {
+            this.Opacity = 1;
             Window window = (Window)sender;
             window.Topmost = AlwaysOnTop.IsChecked;
             if (Properties.Settings.Default.ClickthroughEnabled)
@@ -457,6 +500,21 @@ namespace OverParse
             Properties.Settings.Default.LogToClipboard = LogToClipboard.IsChecked;
         }
 
+        private void EndEncounterNoLog_Click(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Ending encounter (no log)");
+            encounterlog.combatants.Clear();
+            bool temp = Properties.Settings.Default.AutoEndEncounters;
+            Properties.Settings.Default.AutoEndEncounters = false;
+            UpdateForm(null, null);
+            Properties.Settings.Default.AutoEndEncounters = temp;
+            Console.WriteLine("Reinitializing log");
+            SeparateZanverse.IsEnabled = true;
+            SeparateAuxDamage.IsEnabled = true;
+            lastStatus = "";
+            encounterlog = new Log(Properties.Settings.Default.Path);
+        }
+
         private void EndEncounter_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("Ending encounter");
@@ -464,7 +522,20 @@ namespace OverParse
             Properties.Settings.Default.AutoEndEncounters = false;
             UpdateForm(null, null); // I'M FUCKING STUPID
             Properties.Settings.Default.AutoEndEncounters = temp;
-            encounterlog.WriteLog();
+            string filename = encounterlog.WriteLog();
+            if (filename != null) {
+                if ((SessionLogs.Items[0] as MenuItem).Name == "SessionLogPlaceholder")
+                    SessionLogs.Items.Clear();
+                int items = SessionLogs.Items.Count;
+
+                string prettyName = filename.Split('/').LastOrDefault();
+
+                sessionLogFilenames.Add(filename);
+
+                var menuItem = new MenuItem() { Name = "SessionLog_" + items.ToString(), Header = prettyName };
+                menuItem.Click += OpenRecentLog_Click;
+                SessionLogs.Items.Add(menuItem);
+            }
             if (Properties.Settings.Default.LogToClipboard)
             {
                 encounterlog.WriteClipboard();
@@ -473,6 +544,13 @@ namespace OverParse
             SeparateZanverse.IsEnabled = true;
             SeparateAuxDamage.IsEnabled = true;
             encounterlog = new Log(Properties.Settings.Default.Path);
+        }
+
+        private void OpenRecentLog_Click(object sender, RoutedEventArgs e)
+        {
+            string filename = sessionLogFilenames[SessionLogs.Items.IndexOf((e.OriginalSource as MenuItem))];
+            Console.WriteLine($"attempting to open {filename}");
+            Process.Start(Directory.GetCurrentDirectory() + "\\" + filename);
         }
 
         private void OpenLogsFolder_Click(object sender, RoutedEventArgs e)
@@ -497,7 +575,7 @@ namespace OverParse
 
             int x;
             //string input = Microsoft.VisualBasic.Interaction.InputBox("How many seconds should the system wait before stopping an encounter?", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
-            string input = Microsoft.VisualBasic.Interaction.InputBox("戦闘終了後何秒でエンカウントデータをリセットしますか？", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
+            string input = Microsoft.VisualBasic.Interaction.InputBox("戦闘終了後何秒でエンカウントデータを停止しますか？", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
             if (Int32.TryParse(input, out x))
             {
                 if (x > 0)

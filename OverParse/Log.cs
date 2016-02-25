@@ -16,6 +16,7 @@ namespace OverParse
         public int newTimestamp = 0;
         public string filename;
         string encounterData;
+        List<string> instances = new List<string>();
         StreamReader logReader;
         public List<Combatant> combatants = new List<Combatant>();
         Random random = new Random();
@@ -197,7 +198,7 @@ namespace OverParse
             }
         }
 
-        public void WriteLog()
+        public string WriteLog()
         {
             Console.WriteLine("Logging encounter information to file");
             if (combatants.Count != 0)
@@ -205,14 +206,14 @@ namespace OverParse
                 int elapsed = newTimestamp - startTimestamp;
                 TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
                 string timer = timespan.ToString(@"mm\:ss");
-                string log = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now) + " | " + timer + Environment.NewLine;
+                string log = DateTime.Now.ToString("U") + " | " + timer + Environment.NewLine;
 
                 log += Environment.NewLine;
 
                 foreach (Combatant c in combatants)
                 {
                     if (c.isAlly)
-                        log += $"{c.Name} | {c.Damage} dmg | {c.DPSReadout} contrib | {c.DPS} DPS | Max: {c.MaxHit}" + Environment.NewLine;
+                        log += $"{c.Name} | {c.Damage.ToString("N0")} dmg | {c.DPSReadout} contrib | {c.DPS} DPS | Max: {c.MaxHit}" + Environment.NewLine;
                 }
 
                 log += Environment.NewLine;
@@ -221,7 +222,7 @@ namespace OverParse
                 {
                     if (c.isAlly)
                     {
-                        log += $"### {c.Name} - {c.Damage} Dmg ({c.DPSReadout}) ### " + Environment.NewLine;
+                        log += $"### {c.Name} - {c.Damage.ToString("N0")} Dmg ({c.DPSReadout}) ### " + Environment.NewLine;
                         List<string> attackTypes = new List<string>();
                         List<int> damageTotals = new List<int>();
                         foreach (Attack a in c.Attacks)
@@ -254,14 +255,22 @@ namespace OverParse
                         finalAttacks = finalAttacks.OrderBy(x => x.Item2).Reverse().ToList();
                         foreach (Tuple<string, int> t in finalAttacks)
                         {
-                            log += $"{t.Item2 * 100 / total}% | {t.Item1} ({t.Item2} dmg)" + Environment.NewLine;
+                            string padding = (t.Item2 * 100 / total) >= 10 ? "" : " ";
+                            log += $"{t.Item2 * 100 / total}% {padding}| {t.Item1} ({t.Item2.ToString("N0")} dmg)" + Environment.NewLine;
                         }
 
                         log += Environment.NewLine;
                     }
                 }
 
-                File.WriteAllText("Logs/OverParse Log - " + string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now) + ".txt", log);
+                log += "Instance IDs: " + String.Join(", ", instances.ToArray());
+
+                DateTime thisDate = DateTime.Now;
+                string directory = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                Directory.CreateDirectory($"Logs/{directory}");
+                string datetime = string.Format("{0:yyyy-MM-dd_HH-mm-ss}", DateTime.Now);
+                string filename = $"Logs/{directory}/OverParse - {datetime}.txt";
+                File.WriteAllText(filename, log);
 
                 foreach (Combatant c in combatants)
                 {
@@ -278,7 +287,10 @@ namespace OverParse
 
                     }
                 }
+                return filename;
             }
+
+            return null;
         }
 
         public string logStatus()
@@ -351,6 +363,7 @@ namespace OverParse
                     {
                         string[] parts = str.Split(',');
                         string lineTimestamp = parts[0];
+                        string instanceID = parts[1];
                         string sourceID = parts[2];
                         string targetID = parts[4];
                         string targetName = parts[5];
@@ -363,6 +376,9 @@ namespace OverParse
                         int index = -1;
 
                         bool isAuxDamage = false;
+
+                        if (!instances.Contains(instanceID))
+                            instances.Add(instanceID);
 
                         if (hitDamage < 1)
                             continue;
