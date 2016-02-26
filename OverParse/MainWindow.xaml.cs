@@ -50,7 +50,8 @@ namespace OverParse
             try { Directory.CreateDirectory("Logs"); }
             catch
             {
-                MessageBox.Show("OverParse doesn't have write access to its folder, and won't be able to save logs. This usually happens when you run it from Program Files.\n\nThis is a Windows restriction, and unfortunately I can't do anything about it.\n\nPlease run OverParse as administrator, or move it somewhere else. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("OverParse doesn't have write access to its folder, and won't be able to save logs. This usually happens when you run it from Program Files.\n\nThis is a Windows restriction, and unfortunately I can't do anything about it.\n\nPlease run OverParse as administrator, or move it somewhere else. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("OverParseは、フォルダへの書き込みアクセス権を持っていないためログを保存することができません。これは通常時、あなたがプログラムファイルから実行したときに発生します。\n\n管理者としてOverParseを実行するか、他のどこかに移動してください。 ご不便をおかけして申し訳ありません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
 
@@ -64,7 +65,7 @@ namespace OverParse
 
             Console.WriteLine("OVERPARSE V." + Assembly.GetExecutingAssembly().GetName().Version);
 
-            if (Properties.Settings.Default.UpgradeRequired)
+            if (Properties.Settings.Default.UpgradeRequired && !Properties.Settings.Default.ResetInvoked)
             {
                 Console.WriteLine("Upgrading settings");
                 Properties.Settings.Default.Upgrade();
@@ -72,19 +73,20 @@ namespace OverParse
                 Properties.Settings.Default.FirstRun = true;
             }
 
-            Console.WriteLine("Loading settings from file");
-            this.Top = Properties.Settings.Default.Top;
-            this.Left = Properties.Settings.Default.Left;
-            this.Height = Properties.Settings.Default.Height;
-            this.Width = Properties.Settings.Default.Width;
-            AutoEndEncounters.IsChecked = Properties.Settings.Default.AutoEndEncounters;
-            SetEncounterTimeout.IsEnabled = AutoEndEncounters.IsChecked;
-            SeparateZanverse.IsChecked = Properties.Settings.Default.SeparateZanverse;
-            ClickthroughMode.IsChecked = Properties.Settings.Default.ClickthroughEnabled;
-            LogToClipboard.IsChecked = Properties.Settings.Default.LogToClipboard;
-            AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop;
-            SeparateAuxDamage.IsChecked = Properties.Settings.Default.SeparateAuxDamage;
-            AutoHideWindow.IsChecked = Properties.Settings.Default.AutoHideWindow;
+            Console.WriteLine("Applying UI settings");
+            Console.WriteLine(this.Top = Properties.Settings.Default.Top);
+            Console.WriteLine(this.Left = Properties.Settings.Default.Left);
+            Console.WriteLine(this.Height = Properties.Settings.Default.Height);
+            Console.WriteLine(this.Width = Properties.Settings.Default.Width);
+            Console.WriteLine(AutoEndEncounters.IsChecked = Properties.Settings.Default.AutoEndEncounters);
+            Console.WriteLine(SetEncounterTimeout.IsEnabled = AutoEndEncounters.IsChecked);
+            Console.WriteLine(SeparateZanverse.IsChecked = Properties.Settings.Default.SeparateZanverse);
+            Console.WriteLine(ClickthroughMode.IsChecked = Properties.Settings.Default.ClickthroughEnabled);
+            Console.WriteLine(LogToClipboard.IsChecked = Properties.Settings.Default.LogToClipboard);
+            Console.WriteLine(AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop);
+            Console.WriteLine(SeparateAuxDamage.IsChecked = Properties.Settings.Default.SeparateAuxDamage);
+            Console.WriteLine(AutoHideWindow.IsChecked = Properties.Settings.Default.AutoHideWindow);
+            Console.WriteLine("Finished applying settings");
 
             ShowDamageGraph.IsChecked = Properties.Settings.Default.ShowDamageGraph; ShowDamageGraph_Click(null, null);
             ShowRawDPS.IsChecked = Properties.Settings.Default.ShowRawDPS; ShowRawDPS_Click(null, null);
@@ -172,10 +174,10 @@ namespace OverParse
                 if (responseVersion != thisVersion)
                 {
                     //MessageBoxResult result = MessageBox.Show($"There's a new version of OverParse available!\n\nYou're running version {thisVersion}. The latest version is version {responseVersion}.\n\nWould you like to download it now from GitHub?", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                    MessageBoxResult result = MessageBox.Show($"新しいバージョンのOverParse v{responseVersion}が利用可能です!\n\n現在使用中のバージョンはOverParse v{thisVersion}です。\n\nGitHubから新しいバージョンをダウンロードしますか？", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                    MessageBoxResult result = MessageBox.Show($"新しいバージョンのOverParse v{responseVersion}が利用可能です!\n\n現在使用中のバージョンはOverParse v{thisVersion}です。\n\nGitHubから新しいバージョン(日本語版)をダウンロードしますか？", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
                     if (result == MessageBoxResult.Yes)
                     {
-                        Process.Start("https://github.com/nemomomo/OverParse/releases/latest");
+                        Process.Start("https://github.com/nemomomo/OverParse/releases");
                     }
                 }
             }
@@ -188,8 +190,11 @@ namespace OverParse
         {
             if (!Properties.Settings.Default.AutoHideWindow)
                 return;
+
             string title = WindowsServices.GetActiveWindowTitle();
-            if (title != "OverParse" && title != "Phantasy Star Online 2")
+            string[] relevant = { "OverParse", "OverParse Setup", "OverParse Error", "Encounter Timeout","Phantasy Star Online 2" };
+
+            if (!relevant.Contains(title))
             {
                 this.Opacity = 0;
             }
@@ -230,6 +235,28 @@ namespace OverParse
             Environment.Exit(-1);
         }
 
+        private void ResetLogFolder_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Path = "Z:\\OBVIOUSLY\\BROKEN\\DEFAULT\\PATH";
+            EndEncounterNoLog_Click(this, null);
+        }
+
+        private void ResetOverParse(object sender, RoutedEventArgs e)
+        {
+            //MessageBoxResult result = MessageBox.Show("Are you SURE you want to reset OverParse?\n\nThis will clear all of your application settings and allow you to reselect your pso2_bin folder, but won't delete your stored logs.", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            MessageBoxResult result = MessageBox.Show("OverParseをリセットしてもよろしいですか？\n\nリセットすると、アプリケーションの設定をすべて消去して、pso2_binフォルダを再選択することができますが、保存されたログは削除しません。", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            Console.WriteLine("Resetting");
+            Properties.Settings.Default.Reset();
+            Properties.Settings.Default.ResetInvoked = true;
+            Properties.Settings.Default.Save();
+
+            Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
+        }
+
         private void EndEncounter_Key(object sender, HotkeyEventArgs e)
         {
             Console.WriteLine("Encounter hotkey pressed");
@@ -256,7 +283,7 @@ namespace OverParse
             if (AutoHideWindow.IsChecked && Properties.Settings.Default.AutoHideWindowWarning)
             {
                 //MessageBox.Show("This will make the OverParse window invisible whenever PSO2 or OverParse are not in the foreground.\n\nTo show the window, Alt+Tab into OverParse, or click the icon on your taskbar.","OverParse Setup",MessageBoxButton.OK,MessageBoxImage.Information);
-                MessageBox.Show("OverParseかPSO2が手前に表示されていない場合ウィンドウを非表示にします\n\n再度表示するにはAlt+Tabかタスクバーのアイコンをクリックしてください。","OverParse Setup",MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("OverParseかPSO2が手前に表示されていない場合ウィンドウを非表示にします\n\n再度表示するにはAlt+Tabかタスクバーのアイコンをクリックしてください。", "OverParse Setup",MessageBoxButton.OK,MessageBoxImage.Information);
                 Properties.Settings.Default.AutoHideWindowWarning = false;
             }
             Properties.Settings.Default.AutoHideWindow = AutoHideWindow.IsChecked;
@@ -288,6 +315,7 @@ namespace OverParse
         private void AlwaysOnTop_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AlwaysOnTop = AlwaysOnTop.IsChecked;
+            this.OnActivated(e);
         }
 
         private void Opacity_0_Click(object sender, RoutedEventArgs e)
@@ -473,26 +501,31 @@ namespace OverParse
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Console.WriteLine("Closing...");
-            if (WindowState == WindowState.Maximized)
+
+            if (!Properties.Settings.Default.ResetInvoked)
             {
-                // Use the RestoreBounds as the current values will be 0, 0 and the size of the screen
-                Properties.Settings.Default.Top = RestoreBounds.Top;
-                Properties.Settings.Default.Left = RestoreBounds.Left;
-                Properties.Settings.Default.Height = RestoreBounds.Height;
-                Properties.Settings.Default.Width = RestoreBounds.Width;
-                Properties.Settings.Default.Maximized = true;
-            }
-            else
-            {
-                Properties.Settings.Default.Top = this.Top;
-                Properties.Settings.Default.Left = this.Left;
-                Properties.Settings.Default.Height = this.Height;
-                Properties.Settings.Default.Width = this.Width;
-                Properties.Settings.Default.Maximized = false;
+                if (WindowState == WindowState.Maximized)
+                {
+                    Properties.Settings.Default.Top = RestoreBounds.Top;
+                    Properties.Settings.Default.Left = RestoreBounds.Left;
+                    Properties.Settings.Default.Height = RestoreBounds.Height;
+                    Properties.Settings.Default.Width = RestoreBounds.Width;
+                    Properties.Settings.Default.Maximized = true;
+                }
+                else
+                {
+                    Properties.Settings.Default.Top = this.Top;
+                    Properties.Settings.Default.Left = this.Left;
+                    Properties.Settings.Default.Height = this.Height;
+                    Properties.Settings.Default.Width = this.Width;
+                    Properties.Settings.Default.Maximized = false;
+                }
             }
 
-            Properties.Settings.Default.Save();
             encounterlog.WriteLog();
+
+            Properties.Settings.Default.Save();
+
         }
 
         private void LogToClipboard_Click(object sender, RoutedEventArgs e)
@@ -575,7 +608,7 @@ namespace OverParse
 
             int x;
             //string input = Microsoft.VisualBasic.Interaction.InputBox("How many seconds should the system wait before stopping an encounter?", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
-            string input = Microsoft.VisualBasic.Interaction.InputBox("戦闘終了後何秒でエンカウントデータを停止しますか？", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
+            string input = Microsoft.VisualBasic.Interaction.InputBox("戦闘終了後何秒でエンカウントデータの更新を停止しますか？", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
             if (Int32.TryParse(input, out x))
             {
                 if (x > 0)
