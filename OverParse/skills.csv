@@ -1,3 +1,8 @@
+素手,3085782811,PA,Unarmed
+ヒット,1698835891,Melee,Rod - Spcial thanks ID TuJadfG8
+ヒット,1698835954,Melee,Rod - Spcial thanks ID TuJadfG8
+ヒット,1698836726,Melee,Rod - Spcial thanks ID TuJadfG8
+ロッドシュート,82081592,Melee,Rod Shoot - Spcial thanks ID TuJadfG8
 フォイエ,2875245395,Tech,Uncharged
 フォイエ,169905548,Tech,Charged
 ギ・フォイエ,46933754,Tech,Uncharged
@@ -89,7 +94,10 @@
 フォメルギオン,1671704953,Tech,???
 ザンディオン,481495314,Tech,???
 ザンディオン,2644417114,Tech,???
-バーン,2505928584,Status,バーン status
+ポイズン,1739789664,Status,ポイズン status Lv3 - Spcial thanks ID TuJadfG8
+ポイズン,1739789667,Status,ポイズン status Lv4 - Spcial thanks ID TuJadfG8
+バーン,2505928696,Status,バーン status Lv3 - Spcial thanks ID TuJadfG8
+バーン,2505928584,Status,バーン status LV4 - Spcial thanks ID TuJadfG8
 ヒット,1775819901,Melee,Wand
 ヒット,1775820734,Melee,Wand
 ヒット,1775820799,Melee,Wand
@@ -146,6 +154,9 @@ Enemy Thrown,2164805818,PA,beatdown
 サクリファイスバイト,2606728976,PA,サクリファイスバイト smack
 イグナイトパリング,3096775537,PA,イグナイトパリング first four strikes
 イグナイトパリング,54200585,PA,イグナイトパリング final two strikes
+イグナイトパリング,498184876,PA,first hit?
+イグナイトパリング,915561415,PA,last two hits?
+イグナイトパリング,915578993,PA,last two hits?
 ヒット,2285482403,Melee,Partisan 1
 ヒット,2226608029,Melee,Partisan 2
 ヒット,3208780153,Melee,Partisan 3
@@ -210,7 +221,7 @@ Enemy Thrown,2164805818,PA,beatdown
 サーベラスダンス零式,1181894001,,サーベラスダンス finish (crafted)
 ワイルドラウンド,1667539503,PA,ワイルドラウンド
 カイザーライズ,4083089437,PA,カイザーライズ
-アダプトスピン ,4083089500,PA,アダプトスピン 
+アダプトスピン ,4083089500,PA,アダプトスピン
 ヒット,3318968327,Melee,Gunslash M1
 ヒット,1408075886,Melee,Gunslash M2
 ヒット,2364486899,Melee,Gunslash M3
@@ -651,10 +662,14 @@ Tダガースピン,3115487272,Special,Spin full gear
 トリムスパイラル,2211899418,PA,トリムスパイラル (uncharged)
 トリムスパイラル,2211899483,PA,トリムスパイラル (charge lv.1)
 トリムスパイラル,2211900312,PA,トリムスパイラル (charge lv.2)
-トリムスパイラル,926861457,PA,トリムスパイラル (トリムシャウト & charge lv.2)
-トリムバレット,4238918539,PA,トリムバレット
+トリムスパイラル,926861457,PA,トリムスパイラル (トリムシャウト & charge lv.2) (仮)
+トリムバレット,4238918472,PA,トリムバレット shout buff dot? (仮)
+トリムバレット,4238918539,PA,トリムバレット Dot
+トリムバレット,2052351310,PA,トリムバレット Hit 1 ?(仮)
+トリムバレット,672081019,PA,トリムバレット  Hit 2 ?(仮)
 トリムシャウト,4093858743,PA,トリムシャウト
 トリムスラッシュ,4093858613,PA,トリムスラッシュ
+トリムスラッシュ,672024361,PA,トリムスラッシュ shout buff? (仮)
 ヒット,487482498,Melee,Torim auto-attack 1
 ヒット,487482435,Melee,Torim auto-attack 2
 ヒット,487489051,Melee,Torim auto-attack 3
@@ -675,5 +690,8 @@ Tダガースピン,3115487272,Special,Spin full gear
 サリィフォール,385030021,PA,サリィフォール
 サリィチェイサー,385050960,PA,サリィチェイサー
 ヒット,639929291,Melee,Sally auto-attack 1
-Clobber,3104220402,Special,Mag action - Clobber
-Clobber,3296842070,Special,Mag action - Clobber
+SP打撃/乱舞,3104220402,Special,Mag action - 乱舞(S-ATK SP/Clobber)
+SP打撃/乱舞,3296842070,Special,Mag action - 乱舞(S-ATK SP/Clobber)
+射撃/雷炸裂弾,3126711672,Special,Mag action 雷炸裂弾(R-ATK/Exploding Lightning Bullet) - Spcial thanks ID TuJadfG8
+SP射撃/速射,4205203418,Special,Mag sp auto action - 速射(R-ATK SP/Vulcan) - Spcial thanks ID TuJadfG8
+ユリウス・ニフタ,764702094,Special,Photon Blast (Julius Nifta) - Spcial thanks ID TuJadfG8
