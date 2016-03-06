@@ -662,7 +662,8 @@ Tダガースピン,3115487272,Special,Spin full gear
 トリムスパイラル,2211899418,PA,トリムスパイラル (uncharged)
 トリムスパイラル,2211899483,PA,トリムスパイラル (charge lv.1)
 トリムスパイラル,2211900312,PA,トリムスパイラル (charge lv.2)
-トリムスパイラル,926861457,PA,トリムスパイラル (トリムシャウト & charge lv.2) (仮)
+トリムスパイラル,926005986,PA,トリムスパイラル (charge lv.1 shout buff)
+トリムスパイラル,926861457,PA,トリムスパイラル (charge lv.2 shout buff) (仮)
 トリムバレット,4238918472,PA,トリムバレット shout buff dot? (仮)
 トリムバレット,4238918539,PA,トリムバレット Dot
 トリムバレット,2052351310,PA,トリムバレット Hit 1 ?(仮)
@@ -693,5 +694,5 @@ Tダガースピン,3115487272,Special,Spin full gear
 SP打撃/乱舞,3104220402,Special,Mag action - 乱舞(S-ATK SP/Clobber)
 SP打撃/乱舞,3296842070,Special,Mag action - 乱舞(S-ATK SP/Clobber)
 射撃/雷炸裂弾,3126711672,Special,Mag action 雷炸裂弾(R-ATK/Exploding Lightning Bullet) - Spcial thanks ID TuJadfG8
-SP射撃/速射,4205203418,Special,Mag sp auto action - 速射(R-ATK SP/Vulcan) - Spcial thanks ID TuJadfG8
-ユリウス・ニフタ,764702094,Special,Photon Blast (Julius Nifta) - Spcial thanks ID TuJadfG8
+SP射撃/速射,4205203418,Special,Mag action - 速射(R-ATK SP/Vulcan) - Spcial thanks ID TuJadfG8
+ユリウス・ニフタ,764702094,Special,Photon Blast (Julius Nifta)no chain - Spcial thanks ID TuJadfG8

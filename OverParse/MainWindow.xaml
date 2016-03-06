@@ -107,7 +107,7 @@
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Compact mode" x:Name="CompactMode" Click="CompactMode_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="コンパクトモード" x:Name="CompactMode" Click="CompactMode_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Window opacity">-->
-                                    <MenuItem Style="{StaticResource submenu}" Header="ウィンドウの透過率">
+                                <MenuItem Style="{StaticResource submenu}" Header="ウィンドウの透過率">
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_0" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Transparent" Click="Opacity_0_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_25" IsCheckable="True" IsChecked="False" Header="25%" Click="Opacity_25_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_50" IsCheckable="True" IsChecked="False" Header="50%" Click="Opacity_50_Click" />
@@ -124,11 +124,11 @@
                             </MenuItem>
                             <!--<MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="Debug">-->
                             <MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="でばっぐ">
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" Header="偽のエントリーを生成するゾ" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
+                            <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" Header="偽のエントリーを生成する" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
+                            <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="うぃんどうすていたす" x:Name="WindowStats" Click="WindowStats_Click"/>
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>-->
+                            <!--<MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="ろぐのふぁいるねーむ" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Help">
@@ -141,7 +141,8 @@
                                 <Separator />
                                 <MenuItem Style="{StaticResource submenu}" Header="OverParse on GitHub" Click="GitHub_Click"/>
                                 <MenuItem Style="{StaticResource submenu}" Header="OverParse on PSO-World" Click="PSOWorld_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" Header="Quick reference">
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Quick reference">-->
+                                <MenuItem Style="{StaticResource submenu}" Header="外部リンク">
                                     <MenuItem Style="{StaticResource submenu}" Header="EQ Schedule" Click="EQSchedule_Click"/>
                                     <MenuItem Style="{StaticResource submenu}" Header="Arks Layer" Click="ArksLayer_Click"/>
                                     <MenuItem Style="{StaticResource submenu}" Header="Bumped" Click="Bumped_Click"/>

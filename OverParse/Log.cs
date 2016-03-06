@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace OverParse
@@ -23,6 +24,27 @@ namespace OverParse
 
         public Log(string attemptDirectory)
         {
+            Console.WriteLine(FormatNumber(1));
+            Console.WriteLine(FormatNumber(10));
+            Console.WriteLine(FormatNumber(100));
+            Console.WriteLine(FormatNumber(525));
+            Console.WriteLine(FormatNumber(999));
+            Console.WriteLine(FormatNumber(1000));
+            Console.WriteLine(FormatNumber(5250));
+            Console.WriteLine(FormatNumber(10000));
+            Console.WriteLine(FormatNumber(52500));
+            Console.WriteLine(FormatNumber(100000));
+            Console.WriteLine(FormatNumber(525000));
+            Console.WriteLine(FormatNumber(999999));
+            Console.WriteLine(FormatNumber(1000000));
+            Console.WriteLine(FormatNumber(5250000));
+            Console.WriteLine(FormatNumber(10000000));
+            Console.WriteLine(FormatNumber(52500000));
+            Console.WriteLine(FormatNumber(100000000));
+            Console.WriteLine(FormatNumber(525000000));
+            Console.WriteLine(FormatNumber(999999999));
+            Console.WriteLine(FormatNumber(1000000000));
+
             valid = false;
             notEmpty = false;
             running = false;
@@ -31,7 +53,7 @@ namespace OverParse
             {
                 Console.WriteLine("Invalid pso2_bin directory, prompting for new one...");
                 //MessageBox.Show("Please select your pso2_bin directory.\n\nThis folder will be inside your PSO2 install folder, which is usually at C:\\PHANTASYSTARONLINE2\\.\n\nIf you installed the game multiple times (e.g. through the torrent), please make sure you pick the right one, or OverParse won't be able to read your logs!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                MessageBox.Show("pso2_binディレクトリを選択してください。\n\nこのフォルダは、PSO2インストールフォルダの中にあります。\nゲームのインストール先のHDDドライブ>SEGA>PHANTASYSTARONLINE2>", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("pso2_binディレクトリを選択してください。\n\nこのフォルダは、PSO2インストールフォルダの中にあります。C:\\PHANTASYSTARONLINE2\\.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 VistaFolderBrowserDialog oDialog = new VistaFolderBrowserDialog();
                 //oDialog.Description = "Select your pso2_bin folder...";
@@ -160,7 +182,7 @@ namespace OverParse
 
             notEmpty = true;
 
-            FileInfo log = directory.GetFiles().OrderByDescending(f => f.Name).First();
+            FileInfo log = directory.GetFiles().Where(f => Regex.IsMatch(f.Name, @"\d+\.csv")).OrderByDescending(f => f.Name).First();
             Console.WriteLine($"Reading from {log.DirectoryName}\\{log.Name}");
             filename = log.Name;
             FileStream fileStream = File.Open(log.DirectoryName + "\\" + log.Name, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -524,29 +546,18 @@ namespace OverParse
             }
         }
 
-        string FormatNumber(int num)
+        private String FormatNumber(int value)
         {
-            if (num >= 100000000)
-            {
-                return (num / 1000000D).ToString("0.#M");
-            }
+            if (value >= 100000000)
+                return (value / 1000000).ToString("#,0") + "M";
+            if (value >= 1000000)
+                return (value / 1000000D).ToString("0.#") + "M";
+            if (value >= 100000)
+                return (value / 1000).ToString("#,0") + "K";
+            if (value >= 1000)
+                return (value / 1000D).ToString("0.#") + "K";
+            return value.ToString("#,0");
 
-            if (num >= 1000000)
-            {
-                return (num / 1000000D).ToString("0.##M");
-            }
-
-            if (num >= 100000)
-            {
-                return (num / 1000D).ToString("0.#K");
-            }
-
-            if (num >= 10000)
-            {
-                return (num / 1000D).ToString("0.##K");
-            }
-
-            return num.ToString("#,0");
         }
     }
 }
