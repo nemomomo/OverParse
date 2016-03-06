@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 
 using Newtonsoft.Json.Linq;
 using System.Reflection;
-
+using System.Text.RegularExpressions;
 
 namespace OverParse
 {
@@ -51,7 +51,7 @@ namespace OverParse
             catch
             {
                 //MessageBox.Show("OverParse doesn't have write access to its folder, and won't be able to save logs. This usually happens when you run it from Program Files.\n\nThis is a Windows restriction, and unfortunately I can't do anything about it.\n\nPlease run OverParse as administrator, or move it somewhere else. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
-                MessageBox.Show("OverParseは、フォルダへの書き込みアクセス権を持っていないためログを保存することができません。これは通常時、あなたがプログラムファイルから実行したときに発生します。\n\n管理者としてOverParseを実行するか、他のどこかに移動してください。 ご不便をおかけして申し訳ありません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("OverParseは、フォルダへの書き込みアクセス権を持っていないためログを保存することができません。これは通常時、プログラムファイルから実行したときに発生します。\n\n管理者としてOverParseを実行するか、他のどこかに移動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
 
@@ -72,6 +72,8 @@ namespace OverParse
                 Properties.Settings.Default.UpgradeRequired = false;
                 Properties.Settings.Default.FirstRun = true;
             }
+
+            Properties.Settings.Default.ResetInvoked = false;
 
             Console.WriteLine("Applying UI settings");
             Console.WriteLine(this.Top = Properties.Settings.Default.Top);
@@ -147,6 +149,7 @@ namespace OverParse
             Console.WriteLine("Checking for release updates");
             try
             {
+                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/tyronesama/overparse/releases/latest");
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/nemomomo/overparse/releases/latest");
                 request.UserAgent = "OverParse";
                 WebResponse response = request.GetResponse();
@@ -174,10 +177,11 @@ namespace OverParse
                 if (responseVersion != thisVersion)
                 {
                     //MessageBoxResult result = MessageBox.Show($"There's a new version of OverParse available!\n\nYou're running version {thisVersion}. The latest version is version {responseVersion}.\n\nWould you like to download it now from GitHub?", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                    MessageBoxResult result = MessageBox.Show($"新しいバージョンのOverParse v{responseVersion}が利用可能です!\n\n現在使用中のバージョンはOverParse v{thisVersion}です。\n\nGitHubから新しいバージョン(日本語版)をダウンロードしますか？", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                    MessageBoxResult result = MessageBox.Show($"新しいバージョンのOverParse v{responseVersion}が利用可能です!\n\n現在使用中のバージョンはOverParse v{thisVersion}です。\n\nGitHubから新しいバージョンをダウンロードしますか？", "OverParse Update", MessageBoxButton.YesNo, MessageBoxImage.Information);
                     if (result == MessageBoxResult.Yes)
                     {
-                        Process.Start("https://github.com/nemomomo/OverParse/releases");
+                        //Process.Start("https://github.com/TyroneSama/OverParse/releases/latest");
+                        Process.Start("https://github.com/nemomomo/OverParse/releases/latest");
                     }
                 }
             }
@@ -216,7 +220,7 @@ namespace OverParse
                 return;
             }
 
-            FileInfo log = directory.GetFiles().OrderByDescending(f => f.Name).First();
+            FileInfo log = directory.GetFiles().Where(f => Regex.IsMatch(f.Name, @"\d+\.csv")).OrderByDescending(f => f.Name).First();
 
             if (log.Name != encounterlog.filename)
             {
@@ -283,7 +287,7 @@ namespace OverParse
             if (AutoHideWindow.IsChecked && Properties.Settings.Default.AutoHideWindowWarning)
             {
                 //MessageBox.Show("This will make the OverParse window invisible whenever PSO2 or OverParse are not in the foreground.\n\nTo show the window, Alt+Tab into OverParse, or click the icon on your taskbar.","OverParse Setup",MessageBoxButton.OK,MessageBoxImage.Information);
-                MessageBox.Show("OverParseかPSO2が手前に表示されていない場合ウィンドウを非表示にします\n\n再度表示するにはAlt+Tabかタスクバーのアイコンをクリックしてください。", "OverParse Setup",MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("OverParseかPSO2が手前に表示されていない場合ウィンドウを非表示にします\n\n再度表示するにはAlt+Tabかタスクバーのアイコンをクリックしてください。","OverParse Setup",MessageBoxButton.OK,MessageBoxImage.Information);
                 Properties.Settings.Default.AutoHideWindowWarning = false;
             }
             Properties.Settings.Default.AutoHideWindow = AutoHideWindow.IsChecked;
@@ -608,7 +612,7 @@ namespace OverParse
 
             int x;
             //string input = Microsoft.VisualBasic.Interaction.InputBox("How many seconds should the system wait before stopping an encounter?", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
-            string input = Microsoft.VisualBasic.Interaction.InputBox("戦闘終了後何秒でエンカウントデータの更新を停止しますか？", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
+            string input = Microsoft.VisualBasic.Interaction.InputBox("戦闘終了後何秒でエンカウントデータを停止しますか？", "Encounter Timeout", Properties.Settings.Default.EncounterTimeout.ToString());
             if (Int32.TryParse(input, out x))
             {
                 if (x > 0)
@@ -639,8 +643,8 @@ namespace OverParse
         private void About_Click(object sender, RoutedEventArgs e)
         {
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            //MessageBox.Show($"OverParse v{version}\nAnything and everything may be broken.\n\nPlease use damage information responsibly.", "OverParse");
-            MessageBox.Show($"OverParse v{version}\nこのアプリケーションを使用したことによって生じたいかなる損害・HDDバースト等に関しては作者は一切の責任を負いません。\n\n自己責任の上で使用して下さい。", "OverParse");
+            //MessageBox.Show($"OverParse v{version}\nA lightweight self-auditing tool.\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA, and everyone else who makes the Tweaker plugin possible.\n\nPlease use damage information responsibly.", "OverParse");
+            MessageBox.Show($"OverParse v{version}\n簡潔的な自己監視ツール\n\n開発者 WaifuDfnseForce.\nプラグインの開発者 Variant, AIDA, またその他のTweakerやプラグインを開発している誰か\n\nモラルを持って使用してください　ご利用は自己責任でお願いします。", "OverParse");
         }
 
         private void Website_Click(object sender, RoutedEventArgs e)
@@ -655,7 +659,7 @@ namespace OverParse
 
         private void GitHub_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://www.pso-world.com/forums/showthread.php?t=232386");
+            Process.Start("https://github.com/TyroneSama/OverParse");
         }
 
         private void EQSchedule_Click(object sender, RoutedEventArgs e)
