@@ -111,7 +111,7 @@ namespace OverParse
             {
                 Console.WriteLine("Hotkeys failed to initialize");
                 //MessageBox.Show("OverParse failed to initialize hotkeys. This is usually because something else is already using them.\n\nThe program will still work, but hotkeys will not function. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                MessageBox.Show("OverParseはホットキーの初期化に失敗しました。 ほかのアプリケーションと競合している可能性があります。\n\nアプリケーションは動作しますが、ホットキーは機能しません。\nご迷惑をお掛けして申し訳ありません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("OverParseはホットキーの初期化に失敗しました。 ほかのアプリケーションと競合している可能性があります。\n\nアプリケーションは動作しますが、ホットキーは機能しません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
 
@@ -182,6 +182,8 @@ namespace OverParse
                     {
                         //Process.Start("https://github.com/TyroneSama/OverParse/releases/latest");
                         Process.Start("https://github.com/nemomomo/OverParse/releases/latest");
+                        Environment.Exit(-1);
+
                     }
                 }
             }
