@@ -93,6 +93,7 @@ namespace OverParse
             ShowDamageGraph.IsChecked = Properties.Settings.Default.ShowDamageGraph; ShowDamageGraph_Click(null, null);
             ShowRawDPS.IsChecked = Properties.Settings.Default.ShowRawDPS; ShowRawDPS_Click(null, null);
             CompactMode.IsChecked = Properties.Settings.Default.CompactMode; CompactMode_Click(null, null);
+            CompleteOpacity.IsChecked = Properties.Settings.Default.CompleteOpacity; CompleteOpacity_Click(null, null);
             HandleOpacity();
 
             if (Properties.Settings.Default.Maximized)
@@ -111,7 +112,7 @@ namespace OverParse
             {
                 Console.WriteLine("Hotkeys failed to initialize");
                 //MessageBox.Show("OverParse failed to initialize hotkeys. This is usually because something else is already using them.\n\nThe program will still work, but hotkeys will not function. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                MessageBox.Show("OverParseはホットキーの初期化に失敗しました。 ほかのアプリケーションと競合している可能性があります。\n\nアプリケーションは動作しますが、ホットキーは機能しません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("OverParseはホットキーの初期化に失敗しました。 ほかのアプリケーションと競合している可能性があります。\n\nアプリケーションは動作しますが、ホットキーは機能しません。\nご迷惑をお掛けして申し訳ありません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
 
@@ -385,6 +386,19 @@ namespace OverParse
                 Opacity_100.IsChecked = true;
             }
 
+        }
+
+        private void CompleteOpacity_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.CompleteOpacity = CompleteOpacity.IsChecked;
+            if (CompleteOpacity.IsChecked)
+            {
+                WinBorderBackground.Opacity = 1;
+            }
+            else
+            {
+                WinBorderBackground.Opacity = .75;
+            }
         }
 
         private void CompactMode_Click(object sender, RoutedEventArgs e)
