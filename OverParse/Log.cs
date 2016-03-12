@@ -545,7 +545,8 @@ namespace OverParse
                         }
                     }
 
-                    encounterData += $" - {partyDPS.ToString("#.00")} DPS";
+                    if (partyDPS > 0)
+                        encounterData += $" - {partyDPS.ToString("0.00")} DPS";
                 }
             }
         }
