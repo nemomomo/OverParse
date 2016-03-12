@@ -505,7 +505,7 @@ namespace OverParse
                         foreach (Combatant c in combatants)
                         {
                             if (c.Name == "YOU")
-                                encounterData += $" - MAX: {c.MaxHitNum}";
+                                encounterData += $" - MAX: {c.MaxHitNum.ToString("N0")}";
                         }
 
                     }
@@ -546,7 +546,7 @@ namespace OverParse
                     }
 
                     if (partyDPS > 0)
-                        encounterData += $" - {partyDPS.ToString("0.00")} DPS";
+                        encounterData += $" - {partyDPS.ToString("N0.00")} DPS";
                 }
             }
         }
