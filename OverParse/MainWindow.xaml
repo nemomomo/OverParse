@@ -78,7 +78,7 @@
                             <MenuItem Style="{StaticResource topmenu}" x:Name="MenuSystem" Background="Transparent" Header="Logging">
                                 <MenuItem Style="{StaticResource submenu}" Header="End encounter" x:Name="EndEncounter" InputGestureText="Ctrl+Shift+E" Click="EndEncounter_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Discard encounter" x:Name="EndEncounterNoLog" InputGestureText="Ctrl+Shift+R" Click="EndEncounterNoLog_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" Header="戦闘データのリセット" x:Name="EndEncounterNoLog" InputGestureText="Ctrl+Shift+R" Click="EndEncounterNoLog_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="戦闘データの破棄" x:Name="EndEncounterNoLog" InputGestureText="Ctrl+Shift+R" Click="EndEncounterNoLog_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="Automatically end encounters" Click="AutoEndEncounters_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="計測を自動でリセット" Click="AutoEndEncounters_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="Set encounter timeout..." Click="SetEncounterTimeout_Click"/>-->
@@ -91,7 +91,7 @@
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="SessionLogs" Header="Session logs">-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="SessionLogs" Header="セッションログ">
                                     <!--<MenuItem Style="{StaticResource submenu}" x:Name="SessionLogPlaceholder" Header="No logs recorded in this session." IsEnabled="False"/>-->
-                                    <MenuItem Style="{StaticResource submenu}" x:Name="SessionLogPlaceholder" Header="このセッションでログは記録されていません" IsEnabled="False"/>
+                                    <MenuItem Style="{StaticResource submenu}" x:Name="SessionLogPlaceholder" Header="このセッションでは記録されていません" IsEnabled="False"/>
                                 </MenuItem>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Parsing">
@@ -120,8 +120,8 @@
                                     <!--<MenuItem Style="{StaticResource submenu}" x:Name="CompleteOpacity" IsCheckable="True" IsChecked="False" Header="Screenshot-friendly mode" Click="CompleteOpacity_Click" />-->
                                     <MenuItem Style="{StaticResource submenu}" x:Name="CompleteOpacity" IsCheckable="True" IsChecked="False" Header="背景を透過しない" Click="CompleteOpacity_Click" />
                                 </MenuItem>
-                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Always on top" x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="常に手前に表示" InputGestureText="Ctrl+Shift+T"  x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Always on top" InputGestureText="Ctrl+Shift+A"  x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="常に手前に表示" InputGestureText="Ctrl+Shift+A"  x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>
                             <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Auto-hide window" x:Name="AutoHideWindow" Click="AutoHideWindow_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="ウィンドウを自動的に隠す" x:Name="AutoHideWindow" Click="AutoHideWindow_Click"/>
                             <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough while inactive" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>-->
@@ -129,11 +129,11 @@
                             </MenuItem>
                             <!--<MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="Debug">-->
                             <MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="でばっぐ">
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
+                            <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="偽のエントリーを生成する" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
+                            <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="うぃんどうすていたす" x:Name="WindowStats" Click="WindowStats_Click"/>
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>-->
+                            <!--<MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="ろぐのふぁいるねーむ" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Help">
@@ -141,6 +141,8 @@
                                 <Separator />
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Reselect pso2__bin..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="pso2__binを再選択..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Force plugin update..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" Header="強制的にプラグインを更新..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Reset OverParse..." x:Name="Reset" Click="ResetOverParse"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="OverParseをリセット..." x:Name="Reset" Click="ResetOverParse"/>
                                 <Separator />
