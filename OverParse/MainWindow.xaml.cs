@@ -70,7 +70,6 @@ namespace OverParse
                 Console.WriteLine("Upgrading settings");
                 Properties.Settings.Default.Upgrade();
                 Properties.Settings.Default.UpgradeRequired = false;
-                Properties.Settings.Default.FirstRun = true;
             }
 
             Properties.Settings.Default.ResetInvoked = false;
@@ -96,6 +95,8 @@ namespace OverParse
             CompleteOpacity.IsChecked = Properties.Settings.Default.CompleteOpacity; CompleteOpacity_Click(null, null);
             HandleOpacity();
 
+            Console.WriteLine($"Launch method: {Properties.Settings.Default.LaunchMethod}");
+
             if (Properties.Settings.Default.Maximized)
             {
                 WindowState = WindowState.Maximized;
@@ -107,13 +108,13 @@ namespace OverParse
                 HotkeyManager.Current.AddOrReplace("End Encounter", Key.E, ModifierKeys.Control | ModifierKeys.Shift, EndEncounter_Key);
                 HotkeyManager.Current.AddOrReplace("End Encounter (No log)", Key.R, ModifierKeys.Control | ModifierKeys.Shift, EndEncounterNoLog_Key);
                 HotkeyManager.Current.AddOrReplace("Debug Menu", Key.F11, ModifierKeys.Control | ModifierKeys.Shift, DebugMenu_Key);
-                HotkeyManager.Current.AddOrReplace("Always On Top", Key.T, ModifierKeys.Control | ModifierKeys.Shift, AlwaysOnTop_Key);
+                HotkeyManager.Current.AddOrReplace("Always On Top", Key.A, ModifierKeys.Control | ModifierKeys.Shift, AlwaysOnTop_Key);
             }
             catch
             {
                 Console.WriteLine("Hotkeys failed to initialize");
                 //MessageBox.Show("OverParse failed to initialize hotkeys. This is usually because something else is already using them.\n\nThe program will still work, but hotkeys will not function. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                MessageBox.Show("OverParseはホットキーの初期化に失敗しました。 ほかのアプリケーションと競合している可能性があります。\n\nアプリケーションは動作しますが、ホットキーは機能しません。\nご迷惑をお掛けして申し訳ありません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("OverParseはホットキーの初期化に失敗しました。 ほかのアプリケーションと競合している可能性があります。\n\nアプリケーションは動作しますが、ホットキーは機能しません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
 
@@ -183,7 +184,7 @@ namespace OverParse
                     if (result == MessageBoxResult.Yes)
                     {
                         //Process.Start("https://github.com/TyroneSama/OverParse/releases/latest");
-                        Process.Start("https://github.com/nemomomo/OverParse/releases/latest");
+                        //Process.Start("https://github.com/nemomomo/OverParse/releases/latest");
                         Environment.Exit(-1);
 
                     }
@@ -241,6 +242,18 @@ namespace OverParse
             Console.WriteLine(e.Exception.ToString());
             MessageBox.Show(errorMessage, "OverParse Error - 素晴らしく運がないね君は!", MessageBoxButton.OK, MessageBoxImage.Error);
             Environment.Exit(-1);
+        }
+
+        private void UpdatePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.LaunchMethod == "Tweaker")
+            {
+                //MessageBox.Show("You can install the parsing plugin from the PSO2 Tweaker's orb menu, under \"Plugins\".\n\nIf you don't use the PSO2 tweaker, use \"Help > Reset OverParse...\" to go through setup again.");
+                MessageBox.Show("PSO2 Tweakerのメニューからプラグインをインストールすることができます。 \"Plugins\".\n\nPSO2 Tweakerを使用しない場合は \"Help > OverParseをリセット...\" から再度セットアップしてください。");
+                return;
+            }
+            encounterlog.UpdatePlugin(Properties.Settings.Default.Path);
+            EndEncounterNoLog_Click(this, null);
         }
 
         private void ResetLogFolder_Click(object sender, RoutedEventArgs e)
