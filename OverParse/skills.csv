@@ -1,8 +1,8 @@
 素手,3085782811,PA,Unarmed
-ヒット,1698835891,Melee,Rod - Spcial thanks ID TuJadfG8
-ヒット,1698835954,Melee,Rod - Spcial thanks ID TuJadfG8
-ヒット,1698836726,Melee,Rod - Spcial thanks ID TuJadfG8
-ロッドシュート,82081592,Melee,Rod Shoot - Spcial thanks ID TuJadfG8
+ヒット,1698835891,Melee,Rod
+ヒット,1698835954,Melee,Rod
+ヒット,1698836726,Melee,Rod
+ロッドシュート,82081592,Melee,Rod Shoot
 フォイエ,2875245395,Tech,Uncharged
 フォイエ,169905548,Tech,Charged
 ギ・フォイエ,46933754,Tech,Uncharged
@@ -94,10 +94,10 @@
 フォメルギオン,1671704953,Tech,???
 ザンディオン,481495314,Tech,???
 ザンディオン,2644417114,Tech,???
-ポイズン,1739789664,Status,ポイズン status Lv3 - Spcial thanks ID TuJadfG8
-ポイズン,1739789667,Status,ポイズン status Lv4 - Spcial thanks ID TuJadfG8
-バーン,2505928696,Status,バーン status Lv3 - Spcial thanks ID TuJadfG8
-バーン,2505928584,Status,バーン status LV4 - Spcial thanks ID TuJadfG8
+ポイズン,1739789664,Status,ポイズン status Lv3
+ポイズン,1739789667,Status,ポイズン status Lv4
+バーン,2505928696,Status,バーン status Lv3
+バーン,2505928584,Status,バーン status LV4
 ヒット,1775819901,Melee,Wand
 ヒット,1775820734,Melee,Wand
 ヒット,1775820799,Melee,Wand
@@ -418,6 +418,13 @@ Tダガースピン,3115487272,Special,Spin full gear
 グレンテッセン,1776976279,PA,グレンテッセン dash
 グレンテッセン,1522008442,PA,グレンテッセン slash
 カタナコンバット,4259442013,Special,Katana finish megaslash
+ステップアタック,991363414,Melee,DB step attack
+ヒット,990294516,Melee,DB 1st 
+ヒット,990294325,Melee,DB 2nd 
+ヒット,990294387,Melee,DB 3rd 
+ヒット,996054556,Melee,DB 1st air 
+ヒット,996054749,Melee,DB 2nd air 
+ヒット,996054686,Melee,DB 3rd air 
 フォトンブレード,3920319747,Special,フォトンブレード
 フォトンブレード,2866606807,Special,Photon blade fever
 ディストラクトウィング,2674942872,PA,ディストラクトウィング
@@ -658,6 +665,19 @@ Tダガースピン,3115487272,Special,Spin full gear
 ブーストキック,85302966,Special,Tokyo speed-pad kick 2
 ブーストキック,85303031,Special,Tokyo speed-pad kick 3
 ヒット,4065469038,Melee,Baton attack
+ヒット,2785585589,Melee,Wanda auto-attack 1
+ヒット,2785585652,Melee,Wanda auto-attack 2
+ヒット,2785585714,Melee,Wanda auto-attack 3
+ワンダアサルト,933681441,PA,ワンダアサルト
+ワンダブレイク,3960069561,PA,ワンダブレイク
+ワンダショック,3960069496,PA,ワンダショック
+ワンダパルサー,933701936,PA,ワンダパルサー
+ワンダパルサー,4223323079,PA,ワンダパルサー
+ワンダスライサー,2918501417,PA,ワンダスライサー
+ワンダスライサー,2918501480,PA,ワンダスライサー
+ヒット,487482498,Melee,Torim auto-attack 1
+ヒット,487482435,Melee,Torim auto-attack 2
+ヒット,487489051,Melee,Torim auto-attack 3
 トリムスタッブ,4093858806,PA,トリムスタッブ
 トリムスパイラル,2211899418,PA,トリムスパイラル (uncharged)
 トリムスパイラル,2211899483,PA,トリムスパイラル (charge lv.1)
@@ -671,29 +691,39 @@ Tダガースピン,3115487272,Special,Spin full gear
 トリムシャウト,4093858743,PA,トリムシャウト
 トリムスラッシュ,4093858613,PA,トリムスラッシュ
 トリムスラッシュ,672024361,PA,トリムスラッシュ shout buff? (仮)
-ヒット,487482498,Melee,Torim auto-attack 1
-ヒット,487482435,Melee,Torim auto-attack 2
-ヒット,487489051,Melee,Torim auto-attack 3
-ワンダアサルト,933681441,PA,ワンダアサルト
-ワンダブレイク,3960069561,PA,ワンダブレイク
-ワンダショック,3960069496,PA,ワンダショック
-ワンダパルサー,933701936,PA,ワンダパルサー
-ワンダパルサー,4223323079,PA,ワンダパルサー
-ワンダスライサー,2918501417,PA,ワンダスライサー
-ワンダスライサー,2918501480,PA,ワンダスライサー
-ヒット,2785585589,Melee,Wanda auto-attack 1
-ヒット,2785585652,Melee,Wanda auto-attack 2
-ヒット,2785585714,Melee,Wanda auto-attack 3
+ヒット,639929291,Melee,Sally auto-attack 1
 サリィプロード,2156897712,PA,サリィプロード
 サリィテリトリー,493814577,PA,サリィテリトリー
 サリィテリトリー,493814640,PA,サリィテリトリー
 サリィカース,3581010262,PA,サリィカース
 サリィフォール,385030021,PA,サリィフォール
 サリィチェイサー,385050960,PA,サリィチェイサー
-ヒット,639929291,Melee,Sally auto-attack 1
+ヒット,2944355330,Melee,Marron auto-attack 1
+ヒット,2944352598,Melee,Marron auto-attack 2
+ヒット,2944352663,Melee,Marron auto-attack 3
+マロンストライク,3595323408,PA,Marron Strike 0～2 hit
+マロンストライク,3595323990,PA,Marron Strike 3～5 hit
+マロンストライク,3595323799,PA,Marron Strike 6 hit (Max)
+マロンブレイク,115059488,PA,Marron Break
+マロンチェイサー,115059427,PA,Marron Chaser
+マロンカース,1099252288,PA,Marron Curse Hit
+マロンカース,1102156943,PA,Marron  Curse Dot
+ヒット,2920779330,Melee,Melon auto-attack 1
+ヒット,2920778756,Melee,Melon auto-attack 2
+ヒット,2920778949,Melee,Melon auto-attack 3
+メロンストライク,3889466000,PA,Melon Strike 0 hit
+メロンストライク,3889465937,PA,Melon Strike 1 hit
+メロンストライク,3889465879,PA,Melon Strike 2 hit (Max)
+メロンブレイク,3771080959,PA,Melon Break
+メロンチェイサー,3771080766,PA,Melon Chaser
+メロンカース,745748621,PA,Melon Curse Hit
+メロンカース,745791480,PA,Melon Curse Dot
+マロン&メロン爆発死,3460765776,Damage,ストライク後のペットをkillするダメージ
+マロン&メロン暴発,1160289435,Damage,PCへのダメージ
+打撃/アタック,2667138551,Special,Mag action
 SP打撃/乱舞,3104220402,Special,Mag action - 乱舞(S-ATK SP/Clobber)
 SP打撃/乱舞,3296842070,Special,Mag action - 乱舞(S-ATK SP/Clobber)
-射撃/雷炸裂弾,3126711672,Special,Mag action 雷炸裂弾(R-ATK/Exploding Lightning Bullet) - Spcial thanks ID TuJadfG8
-SP射撃/速射,4205203418,Special,Mag action - 速射(R-ATK SP/Vulcan) - Spcial thanks ID TuJadfG8
-ユリウス・ニフタ,764702094,Special,Photon Blast (Julius Nifta)no chain - Spcial thanks ID TuJadfG8
+射撃/雷炸裂弾,3126711672,Special,Mag action 雷炸裂弾(R-ATK/Exploding Lightning Bullet)
+SP射撃/速射,4205203418,Special,Mag action - 速射(R-ATK SP/Vulcan)
+ユリウス・ニフタ,764702094,Special,Photon Blast (Julius Nifta)no chain
 デュアルブレードスナッチ,1317379950,Ring,Skill Ring
