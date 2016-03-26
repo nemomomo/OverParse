@@ -190,7 +190,8 @@ namespace OverParse
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Something went wrong with manual installation. This usually means that the files are already in use: try again with PSO2 closed.\n\nIf you've recieved this message even after closing PSO2, you may need to run OverParse as administrator.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Something went wrong with manual installation. This usually means that the files are already in use: try again with PSO2 closed.\n\nIf you've recieved this message even after closing PSO2, you may need to run OverParse as administrator.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("手動インストールで問題が発生しました。 これは通常、ファイルが使用中の場合に表示されます。: PSO2を終了した状態でもう一度試してください。\n\nPSO2を終了した状態で、このメッセージが表示された場合は、管理者権限でOverParseを実行する必要があります。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
                 Console.WriteLine($"PLUGIN INSTALL FAILED: {ex.ToString()}");
 
                 return false;
@@ -235,7 +236,7 @@ namespace OverParse
                 int elapsed = newTimestamp - startTimestamp;
                 TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
                 string timer = timespan.ToString(@"mm\:ss");
-                string log = DateTime.Now.ToString("U") + " | " + timer + Environment.NewLine;
+                string log = DateTime.Now.ToString("F") + " | " + timer + Environment.NewLine;
 
                 log += Environment.NewLine;
 

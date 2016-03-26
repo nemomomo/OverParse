@@ -142,7 +142,7 @@
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Reselect pso2__bin..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="pso2__binを再選択..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Force plugin update..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" Header="強制的にプラグインを更新..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="プラグインを再インストール..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Reset OverParse..." x:Name="Reset" Click="ResetOverParse"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="OverParseをリセット..." x:Name="Reset" Click="ResetOverParse"/>
                                 <Separator />

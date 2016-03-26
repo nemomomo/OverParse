@@ -79,6 +79,19 @@ namespace OverParse
             Console.WriteLine(this.Left = Properties.Settings.Default.Left);
             Console.WriteLine(this.Height = Properties.Settings.Default.Height);
             Console.WriteLine(this.Width = Properties.Settings.Default.Width);
+
+            bool outOfBounds = (this.Left <= SystemParameters.VirtualScreenLeft - this.Width) ||
+               (this.Top <= SystemParameters.VirtualScreenTop - this.Height) ||
+               (SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth <= this.Left) ||
+               (SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight <= this.Top);
+
+            if (outOfBounds)
+            {
+                Console.WriteLine("Window's off-screen, resetting");
+                this.Top = 50;
+                this.Left = 50;
+            }
+
             Console.WriteLine(AutoEndEncounters.IsChecked = Properties.Settings.Default.AutoEndEncounters);
             Console.WriteLine(SetEncounterTimeout.IsEnabled = AutoEndEncounters.IsChecked);
             Console.WriteLine(SeparateZanverse.IsChecked = Properties.Settings.Default.SeparateZanverse);
@@ -184,7 +197,7 @@ namespace OverParse
                     if (result == MessageBoxResult.Yes)
                     {
                         //Process.Start("https://github.com/TyroneSama/OverParse/releases/latest");
-                        //Process.Start("https://github.com/nemomomo/OverParse/releases/latest");
+                        Process.Start("https://github.com/nemomomo/OverParse/releases/latest");
                         Environment.Exit(-1);
 
                     }
@@ -249,7 +262,7 @@ namespace OverParse
             if (Properties.Settings.Default.LaunchMethod == "Tweaker")
             {
                 //MessageBox.Show("You can install the parsing plugin from the PSO2 Tweaker's orb menu, under \"Plugins\".\n\nIf you don't use the PSO2 tweaker, use \"Help > Reset OverParse...\" to go through setup again.");
-                MessageBox.Show("PSO2 Tweakerのメニューからプラグインをインストールすることができます。 \"Plugins\".\n\nPSO2 Tweakerを使用しない場合は \"Help > OverParseをリセット...\" から再度セットアップしてください。");
+                MessageBox.Show("PSO2 Tweaker使用者はPSO2 Tweakerの左上の○をクリックし\"Plugins\"から\nプラグインをインストールすることができます。\n\nPSO2 Tweakerを使用しない場合は \"Help > OverParseをリセット...\" からOverParseをリセットし\"PSO2 Tweakerを使用しない\"を選択すると\"プラグインを再インストール...\"からインストールすることができます。");
                 return;
             }
             encounterlog.UpdatePlugin(Properties.Settings.Default.Path);
