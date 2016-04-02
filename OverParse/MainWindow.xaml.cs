@@ -50,8 +50,8 @@ namespace OverParse
             try { Directory.CreateDirectory("Logs"); }
             catch
             {
-                //MessageBox.Show("OverParse doesn't have write access to its folder, and won't be able to save logs. This usually happens when you run it from Program Files.\n\nThis is a Windows restriction, and unfortunately I can't do anything about it.\n\nPlease run OverParse as administrator, or move it somewhere else. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
-                MessageBox.Show("OverParseは、フォルダへの書き込みアクセス権を持っていないためログを保存することができません。これは通常時、プログラムファイルから実行したときに発生します。\n\n管理者としてOverParseを実行するか、他のどこかに移動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("OverParse doesn't have write access to its folder, and won't be able to save logs or update skill mappings. This usually happens when you run it from Program Files.\n\nThis is a Windows restriction, and unfortunately I can't do anything about it.\n\nPlease run OverParse as administrator, or move it somewhere else. Sorry for the inconvenience!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("OverParseは、フォルダへの書き込みアクセス権を持っていないためログやスキルマッピングの更新を保存することができません。これは通常時、プログラムファイルから実行したときに発生します。\n\n管理者としてOverParseを実行するか、他のどこかに移動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
 
@@ -131,12 +131,45 @@ namespace OverParse
             }
 
 
-            Console.WriteLine("Reading skills.csv");
-            string[] tmp = File.ReadAllLines("skills.csv");
+            Console.WriteLine("Updating skills.csv");
+            string[] tmp;
+            try
+            {
+                WebClient client = new WebClient();
+                //Stream stream = client.OpenRead("https://raw.githubusercontent.com/VariantXYZ/PSO2ACT/master/PSO2ACT/skills.csv");
+                Stream stream = client.OpenRead("https://raw.githubusercontent.com/nemomomo/PSO2ACT/master/PSO2ACT/skills.csv");
+                StreamReader webreader = new StreamReader(stream);
+                String content = webreader.ReadToEnd();
+
+                tmp = content.Split('\n');
+                File.WriteAllText("skills.csv", content);
+            } catch (Exception ex)
+            {
+                Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
+                if (File.Exists("skills.csv"))
+                {
+                    //MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("OverParseは、スキルマップの更新に失敗しました。\n\nローカルのデータが代わりに使用されます。更新したい場合は、OverParseを再起動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    tmp = File.ReadAllLines("skills.csv");
+                } else
+                {
+                    //MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nSince you have no skill mappings downloaded, all attacks will be marked as \"Unknown\". If you'd like to try and update again, please relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("OverParseは、スキルマップの更新に失敗しました。\n\nスキルマップをダウンロードしていないので、すべての攻撃は\"Unknown\"と表示されます。今すぐダウンロードしたい場合は、OverParseを再起動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    tmp = new string[0];
+                }
+            }
+
+            Console.WriteLine("Parsing skills.csv");
+
             foreach (string s in tmp)
             {
                 string[] split = s.Split(',');
-                skillDict.Add(split[1], split[0]);
+                if (split.Length > 1)
+                {
+                    skillDict.Add(split[1], split[0]);
+                    Console.WriteLine(s);
+                    Console.WriteLine(split[1] + " " + split[0]);
+                }
             }
             Console.WriteLine("Keys in skill dict: " + skillDict.Count());
 
