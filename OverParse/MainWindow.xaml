@@ -76,17 +76,19 @@
                         <Image x:Name="image" Height="16" VerticalAlignment="Top" Width="16" Source="pa_0105.ico" MouseDown="Window_MouseDown" ToolTip="Drag me!"/>
                         <Menu x:Name="MenuBar" DockPanel.Dock="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="16">
                             <MenuItem Style="{StaticResource topmenu}" x:Name="MenuSystem" Background="Transparent" Header="Logging">
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="End encounter" x:Name="EndEncounter" InputGestureText="Ctrl+Shift+E" Click="EndEncounter_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="End encounter" x:Name="EndEncounter" InputGestureText="Ctrl+Shift+E" Click="EndEncounter_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Discard encounter" x:Name="EndEncounterNoLog" InputGestureText="Ctrl+Shift+R" Click="EndEncounterNoLog_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="戦闘データの破棄" x:Name="EndEncounterNoLog" InputGestureText="Ctrl+Shift+R" Click="EndEncounterNoLog_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="Automatically end encounters" Click="AutoEndEncounters_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="計測を自動でリセット" Click="AutoEndEncounters_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="Set encounter timeout..." Click="SetEncounterTimeout_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="戦闘時間間隔の設定..." Click="SetEncounterTimeout_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="戦闘時間間隔の設定…" Click="SetEncounterTimeout_Click"/>
                                 <Separator />
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="LogToClipboard" IsCheckable="True" IsChecked="True" Header="Log results to clipboard" Click="LogToClipboard_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="LogToClipboard" IsCheckable="True" IsChecked="True" Header="クリップボードに結果を出力" Click="LogToClipboard_Click"/>
                                 <Separator />
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Open logs folder..." Click="OpenLogsFolder_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="Open logs folder..." Click="OpenLogsFolder_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="SessionLogs" Header="Session logs">-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="SessionLogs" Header="セッションログ">
@@ -101,39 +103,41 @@
                                 <MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="%表示をDPSに変更" Click="ShowRawDPS_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="Show Zanverse damage separately" Click="SeparateZanverse_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="ザンバースのダメージを分けて表示" Click="SeparateZanverse_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" x:Name="SeparateAuxDamage" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Show AIS/Turret damage separately" Click="SeparateAuxDamage_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" x:Name="SeparateAuxDamage" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Show AIS/Turret damage separately" Click="SeparateAuxDamage_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" x:Name="SeparateAuxDamage" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="AISと機銃のダメージを分けて表示" Click="SeparateAuxDamage_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Show damage graph" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="ダメージグラフを表示" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Anonymize names" x:Name="AnonymizeNames" Click="AnonymizeNames_Click"/>-->
+                                <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="名前を隠す" x:Name="AnonymizeNames" Click="AnonymizeNames_Click"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Window">
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Compact mode" x:Name="CompactMode" Click="CompactMode_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="コンパクトモード" x:Name="CompactMode" Click="CompactMode_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Window opacity">-->
-                                <MenuItem Style="{StaticResource submenu}" Header="ウィンドウの透過率">
+                                <MenuItem Style="{StaticResource submenu}" Header="ウィンドウの透過率">-->
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_0" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Transparent" Click="Opacity_0_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_25" IsCheckable="True" IsChecked="False" Header="25%" Click="Opacity_25_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_50" IsCheckable="True" IsChecked="False" Header="50%" Click="Opacity_50_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_75" IsCheckable="True" IsChecked="True" Header="75%" Click="Opacity_75_Click" />
                                     <!--<MenuItem Style="{StaticResource submenu}" x:Name="Opacity_100" IsCheckable="True" IsChecked="False" Header="Opaque" Click="Opacity_100_Click" />-->
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Opacity_100" IsCheckable="True" IsChecked="False" Header="不透明" Click="Opacity_100_Click" />
-                                    <Separator />
+                                        <Separator />
                                     <!--<MenuItem Style="{StaticResource submenu}" x:Name="CompleteOpacity" IsCheckable="True" IsChecked="False" Header="Screenshot-friendly mode" Click="CompleteOpacity_Click" />-->
-                                    <MenuItem Style="{StaticResource submenu}" x:Name="CompleteOpacity" IsCheckable="True" IsChecked="False" Header="背景を透過しない" Click="CompleteOpacity_Click" />
+                                        <MenuItem Style="{StaticResource submenu}" x:Name="CompleteOpacity" IsCheckable="True" IsChecked="False" Header="背景を透過しない" Click="CompleteOpacity_Click" />
                                 </MenuItem>
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Always on top" InputGestureText="Ctrl+Shift+A"  x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="常に手前に表示" InputGestureText="Ctrl+Shift+A"  x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>
-                            <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Auto-hide window" x:Name="AutoHideWindow" Click="AutoHideWindow_Click"/>-->
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Auto-hide window" x:Name="AutoHideWindow" Click="AutoHideWindow_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="ウィンドウを自動的に隠す" x:Name="AutoHideWindow" Click="AutoHideWindow_Click"/>
-                            <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough while inactive" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>-->
+                                <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough while inactive" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="非アクティブ時にクリックを無効" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
                             </MenuItem>
-                            <!--<MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="Debug">-->
-                            <MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="でばっぐ">
-                            <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
+                            <MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="Debug">
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="偽のエントリーを生成する" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
-                            <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="うぃんどうすていたす" x:Name="WindowStats" Click="WindowStats_Click"/>
-                            <!--<MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>-->
+                                <!--<MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="ろぐのふぁいるねーむ" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Help">
@@ -142,7 +146,7 @@
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Reselect pso2__bin..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="pso2__binを再選択..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Force plugin update..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" Header="プラグインを再インストール..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="強制的にプラグインを更新..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Reset OverParse..." x:Name="Reset" Click="ResetOverParse"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="OverParseをリセット..." x:Name="Reset" Click="ResetOverParse"/>
                                 <Separator />
@@ -186,28 +190,28 @@
                                         <Setter Property="IsHitTestVisible" Value="False"/>
                                     </Style>
                                 </GridView.ColumnHeaderContainerStyle>
-                                <GridViewColumn Header="Name" Width="{Binding ElementName=helper1, Path=ActualWidth}">
+                                <GridViewColumn Header="Name" x:Name="NameColumn" Width="{Binding ElementName=NameHelper, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Margin="-4,0" Text="{Binding Name}" TextAlignment="Left"/>
+                                            <TextBlock Margin="-4,0" Text="{Binding DisplayName}" TextAlignment="Left"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Damage" Width="{Binding ElementName=helper2, Path=ActualWidth}">
+                                <GridViewColumn Header="Damage" x:Name="DamageColumn" Width="{Binding ElementName=DamageHelper, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Margin="-4,0" Text="{Binding DamageReadout}" TextAlignment="Left"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="DPS" x:Name="DPSColumn" Width="{Binding ElementName=helper3, Path=ActualWidth}">
+                                <GridViewColumn Header="DPS" x:Name="DPSColumn" Width="{Binding ElementName=DPSHelper, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Margin="-4,0" Text="{Binding DPSReadout}" TextAlignment="Right"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Max Hit" x:Name="MaxHitColumn" Width="{Binding ElementName=helper4, Path=ActualWidth}">
+                                <GridViewColumn Header="Max Hit" x:Name="MaxHitColumn" Width="{Binding ElementName=MaxHitHelper, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Margin="-4,0" Text="{Binding MaxHit}" TextAlignment="Right"/>
@@ -221,16 +225,16 @@
 
                     <Grid Visibility="Hidden" Grid.Row="1" Margin="0" Grid.RowSpan="2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.5*"/>
-                            <ColumnDefinition Width="1.5*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition x:Name="MaxHitHelper" Width="3*"/>
+                            <ColumnDefinition x:Name="NameHelperColumn" Width="1.5*"/>
+                            <ColumnDefinition x:Name="DamageHelperColumn" Width="1.5*"/>
+                            <ColumnDefinition x:Name="DPSHelperColumn" Width="1*"/>
+                            <ColumnDefinition x:Name="MaxHitHelperColumn" Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <!--This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid-->
-                        <Grid Grid.Column="0" x:Name="helper1"/>
-                        <Grid Grid.Column="1" x:Name="helper2"/>
-                        <Grid Grid.Column="2" x:Name="helper3"/>
-                        <Grid Grid.Column="3" x:Name="helper4"/>
+                        <Grid Grid.Column="0" x:Name="NameHelper"/>
+                        <Grid Grid.Column="1" x:Name="DamageHelper"/>
+                        <Grid Grid.Column="2" x:Name="DPSHelper"/>
+                        <Grid Grid.Column="3" x:Name="MaxHitHelper"/>
                     </Grid>
                     <Rectangle Panel.ZIndex="999" x:Name="EncounterIndicator" Fill="#FFF4F4F5" Grid.Row="2" Height="2" Stroke="Transparent" VerticalAlignment="Top"/>
                     

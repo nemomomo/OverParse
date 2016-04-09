@@ -23,7 +23,25 @@ namespace OverParse
 
         bool isYou()
         {
-            return (Name == "YOU" || Name == "YOU (Aux)");
+            return (ID == Hacks.currentPlayerID);
+        }
+
+        public string AnonymousName() {
+            if (isYou())
+                return Name;
+        else
+                return "安藤";
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                if (Hacks.AnonymizeNames && isAlly)
+                    return AnonymousName();
+                return Name;
+            }
+
         }
 
         public Brush Brush
