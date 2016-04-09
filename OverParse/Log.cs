@@ -10,19 +10,19 @@ namespace OverParse
 {
     public class Log
     {
-        const int pluginVersion = 1;
+        private const int pluginVersion = 2;
 
         public bool notEmpty;
         public bool valid;
         public bool running;
-        int startTimestamp = 0;
+        private int startTimestamp = 0;
         public int newTimestamp = 0;
         public string filename;
-        string encounterData;
-        List<string> instances = new List<string>();
-        StreamReader logReader;
+        private string encounterData;
+        private List<string> instances = new List<string>();
+        private StreamReader logReader;
         public List<Combatant> combatants = new List<Combatant>();
-        Random random = new Random();
+        private Random random = new Random();
 
         public Log(string attemptDirectory)
         {
@@ -85,6 +85,29 @@ namespace OverParse
             Console.WriteLine("Making sure pso2_bin\\damagelogs exists");
             DirectoryInfo directory = new DirectoryInfo($"{attemptDirectory}\\damagelogs");
 
+            Console.WriteLine("Checking for damagelog directory override");
+            if (File.Exists($"{attemptDirectory}\\plugins\\PSO2DamageDump.cfg"))
+            {
+                Console.WriteLine("Found a config file for damage dump plugin, parsing");
+                String[] lines = File.ReadAllLines($"{attemptDirectory}\\plugins\\PSO2DamageDump.cfg");
+                foreach (String s in lines)
+                {
+                    String[] split = s.Split('=');
+                    Console.WriteLine(split[0] + "|" + split[1]);
+                    if (split.Length < 2)
+                        continue;
+                    if (split[0].Split('[')[0] == "directory")
+                    {
+                        directory = new DirectoryInfo(split[1]);
+                        Console.WriteLine($"Log directory override: {split[1]}");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("No PSO2DamageDump.cfg");
+            }
+
             if (Properties.Settings.Default.LaunchMethod == "Unknown")
             {
                 Console.WriteLine("LaunchMethod prompt");
@@ -104,11 +127,12 @@ namespace OverParse
                     }
                 }
 
-                if (warn)
+                if (warn && Hacks.DontAsk)
                 {
                     Console.WriteLine("No damagelog warning");
-                    //MessageBox.Show("Your PSO2 folder doesn't contain any damagelogs. This is not an error, just a reminder!\n\nPlease turn on the Damage Parser plugin in PSO2 Tweaker (orb menu > Plugins). OverParse needs this to function. You may also want to update the plugins while you're there.", "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
-                    MessageBox.Show("PSO2フォルダにdamagelogsがありません。 Damage Parser pluginを有効にしていますか？\n\n有効にしていない場合はPSO2 Tweakerのmenu > PluginsからDamage Parser pluginをonにしてください。 OverParseが情報を取得するために必要です。", "通知", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //MessageBox.Show("Your PSO2 folder doesn't contain any damagelogs. This is not an error, just a reminder!\n\nPlease turn on the Damage Parser plugin in PSO2 Tweaker (orb menu > Plugins). OverParse needs this to function. You may also want to update the plugins while you're there.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("PSO2フォルダにdamagelogsがありません。 Damage Parser pluginを有効にしていますか？\n\n有効にしていない場合はPSO2 Tweakerのmenu > PluginsからDamage Parser pluginをonにしてください。 OverParseが情報を取得するために必要です。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Hacks.DontAsk = true;
                     Properties.Settings.Default.FirstRun = false;
                     Properties.Settings.Default.Save();
                     return;
@@ -170,8 +194,22 @@ namespace OverParse
             Console.WriteLine($"Reading from {log.DirectoryName}\\{log.Name}");
             filename = log.Name;
             FileStream fileStream = File.Open(log.DirectoryName + "\\" + log.Name, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            fileStream.Seek(0, SeekOrigin.End);
+            fileStream.Seek(0, SeekOrigin.Begin);
             logReader = new StreamReader(fileStream);
+
+            string existingLines = logReader.ReadToEnd(); // gotta get the dummy line for current player name
+            string[] result = existingLines.Split('\n');
+            foreach (string s in result)
+            {
+                if (s == "")
+                    continue;
+                string[] parts = s.Split(',');
+                if (parts[0] == "0" && parts[3] == "YOU")
+                {
+                    Hacks.currentPlayerID = parts[2];
+                    Console.WriteLine("Found existing active player ID: " + parts[2]);
+                }
+            }
         }
 
         public bool UpdatePlugin(string attemptDirectory)
@@ -231,6 +269,19 @@ namespace OverParse
         public string WriteLog()
         {
             Console.WriteLine("Logging encounter information to file");
+
+            foreach (Combatant c in combatants) // Debug for ID mapping
+            {
+                foreach (Attack a in c.Attacks)
+                {
+                    if (!MainWindow.skillDict.ContainsKey(a.ID))
+                    {
+                        TimeSpan t = TimeSpan.FromSeconds(a.Timestamp);
+                        Console.WriteLine($"{t.ToString(@"dd\.hh\:mm\:ss")} unmapped: {a.ID} ({a.Damage} dmg from {c.Name})");
+                    }
+                }
+            }
+
             if (combatants.Count != 0)
             {
                 int elapsed = newTimestamp - startTimestamp;
@@ -306,21 +357,6 @@ namespace OverParse
                 string filename = $"Logs/{directory}/OverParse - {datetime}.txt";
                 File.WriteAllText(filename, log);
 
-                foreach (Combatant c in combatants)
-                {
-                    if (c.Name == "YOU")
-                    {
-                        foreach (Attack a in c.Attacks)
-                        {
-                            if (!MainWindow.skillDict.ContainsKey(a.ID))
-                            {
-                                TimeSpan t = TimeSpan.FromSeconds(a.Timestamp);
-                                Console.WriteLine($"UNMAPPED ATTACK - {t.ToString(@"hh\h\:mm\m\:ss\s\:fff\m\s")} -- {a.ID} dealing {a.Damage} dmg" + Environment.NewLine);
-                            }
-                        }
-
-                    }
-                }
                 return filename;
             }
 
@@ -409,6 +445,13 @@ namespace OverParse
                         string isMisc2 = parts[12];
                         int index = -1;
 
+                        if (lineTimestamp == "0" && sourceName == "YOU")
+                        {
+                            Hacks.currentPlayerID = parts[2];
+                            Console.WriteLine("Found new active player ID: " + parts[2]);
+                            continue;
+                        }
+
                         bool isAuxDamage = false;
 
                         if (!instances.Contains(instanceID))
@@ -487,7 +530,6 @@ namespace OverParse
                             source.MaxHitNum = hitDamage;
                             source.MaxHitID = attackID;
                         }
-
                     }
                 }
 
@@ -515,9 +557,7 @@ namespace OverParse
                             if (c.Name == "YOU")
                                 encounterData += $" - MAX: {c.MaxHitNum.ToString("N0")}";
                         }
-
                     }
-
 
                     foreach (Combatant x in combatants)
                     {
@@ -538,7 +578,6 @@ namespace OverParse
                     }
 
                     float workingPartyDPS = partyDPS - zanverseCompensation;
-
 
                     foreach (Combatant x in combatants)
                     {
@@ -570,7 +609,6 @@ namespace OverParse
             if (value >= 1000)
                 return (value / 1000D).ToString("0.#") + "K";
             return value.ToString("#,0");
-
         }
     }
 }
