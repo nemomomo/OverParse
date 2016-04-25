@@ -39,11 +39,6 @@ namespace OverParse
 
             this.Dispatcher.UnhandledException += Panic;
 
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://107.170.16.100/Plugins/PSO2DamageDump.dll");
-            //request.Method = "HEAD";
-            //HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
-            //Console.WriteLine(resp.LastModified);
-
             try { Directory.CreateDirectory("Logs"); }
             catch
             {
@@ -51,6 +46,20 @@ namespace OverParse
                 MessageBox.Show("OverParseは、フォルダへの書き込みアクセス権を持っていないためログやスキルマッピングの更新を保存することができません。これは通常時、プログラムファイルから実行したときに発生します。\n\n管理者としてOverParseを実行するか、他のどこかに移動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
+
+            /* ABANDON ALL HOPE YE WHO ENTER HERE
+            string pluginURL = "http://107.170.16.100/Plugins/PSO2DamageDump.dll";
+            HttpWebRequest dateRequest = (HttpWebRequest)WebRequest.Create(pluginURL);
+            dateRequest.Method = "HEAD";
+            HttpWebResponse resp = (HttpWebResponse)dateRequest.GetResponse();
+            DateTime remoteDate = resp.LastModified.ToUniversalTime();
+            DateTime localDate = File.GetLastWriteTimeUtc(@"Resources/PSO2DamageDump.dll");
+            if (localDate < remoteDate)
+            {
+                MessageBox.Show("local file's old");
+                WebClient webClient = new WebClient();
+                webClient.DownloadFile(pluginURL, @"Resources/PSO2DamageDump.dll");
+            } */
 
             Directory.CreateDirectory("Debug");
 
@@ -103,8 +112,8 @@ namespace OverParse
             ShowRawDPS.IsChecked = Properties.Settings.Default.ShowRawDPS; ShowRawDPS_Click(null, null);
             CompactMode.IsChecked = Properties.Settings.Default.CompactMode; CompactMode_Click(null, null);
             AnonymizeNames.IsChecked = Properties.Settings.Default.AnonymizeNames; AnonymizeNames_Click(null, null);
-            CompleteOpacity.IsChecked = Properties.Settings.Default.CompleteOpacity; CompleteOpacity_Click(null, null);
-            HandleOpacity();
+            HighlightYourDamage.IsChecked = Properties.Settings.Default.HighlightYourDamage; HighlightYourDamage_Click(null, null);
+            HandleWindowOpacity(); HandleListOpacity();
 
             Console.WriteLine($"Launch method: {Properties.Settings.Default.LaunchMethod}");
 
@@ -153,7 +162,7 @@ namespace OverParse
                 else
                 {
                     //MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nSince you have no skill mappings downloaded, all attacks will be marked as \"Unknown\". If you'd like to try and update again, please relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    MessageBox.Show("OverParseは、スキルマップの更新に失敗しました。\n\nスキルマップをダウンロードしていないので、すべての攻撃は\"Unknown\"と表示されます。今すぐダウンロードしたい場合は、OverParseを再起動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("OverParseは、スキルマップの取得に失敗しました。\n\nスキルマップをダウンロードしていないので、すべての攻撃は\"Unknown\"と表示されます。今すぐダウンロードしたい場合は、OverParseを再起動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     tmp = new string[0];
                 }
             }
@@ -253,7 +262,7 @@ namespace OverParse
             }
             else
             {
-                HandleOpacity();
+                HandleWindowOpacity();
             }
         }
 
@@ -292,7 +301,7 @@ namespace OverParse
             if (Properties.Settings.Default.LaunchMethod == "Tweaker")
             {
                 //MessageBox.Show("You can install the parsing plugin from the PSO2 Tweaker's orb menu, under \"Plugins\".\n\nIf you don't use the PSO2 tweaker, use \"Help > Reset OverParse...\" to go through setup again.");
-                MessageBox.Show("PSO2 Tweaker使用者はPSO2 Tweakerの左上の○をクリックし\"Plugins\"から\nプラグインをインストールすることができます。\n\nPSO2 Tweakerを使用しない場合は \"Help > OverParseをリセット...\" からOverParseをリセットし\"PSO2 Tweakerを使用しない\"を選択すると\"プラグインを再インストール...\"からインストールすることができます。");
+                MessageBox.Show("PSO2 Tweaker使用者はPSO2 Tweakerの左上の○をクリックし\"Plugins\"から\nプラグインをインストールすることができます。\n\nPSO2 Tweakerを使用しない場合は \"Help > OverParseをリセット...\" からOverParseをリセットし\"PSO2 Tweakerを使用しない\"を選択することで\"強制的にプラグインを更新...\"からインストールすることができます。");
                 return;
             }
             encounterlog.UpdatePlugin(Properties.Settings.Default.Path);
@@ -364,7 +373,7 @@ namespace OverParse
             if (AutoHideWindow.IsChecked && Properties.Settings.Default.AutoHideWindowWarning)
             {
                 //MessageBox.Show("This will make the OverParse window invisible whenever PSO2 or OverParse are not in the foreground.\n\nTo show the window, Alt+Tab into OverParse, or click the icon on your taskbar.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                MessageBox.Show("OverParseかPSO2が手前に表示されていない場合ウィンドウを非表示にします\n\n再度表示するにはAlt+Tabかタスクバーのアイコンをクリックしてください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("OverParseかPSO2が手前に表示されていない場合ウィンドウを非表示にします。\n\n再度表示するにはAlt+Tabかタスクバーのアイコンをクリックしてください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                 Properties.Settings.Default.AutoHideWindowWarning = false;
             }
             Properties.Settings.Default.AutoHideWindow = AutoHideWindow.IsChecked;
@@ -384,6 +393,7 @@ namespace OverParse
         {
             Properties.Settings.Default.ShowDamageGraph = ShowDamageGraph.IsChecked;
             Hacks.ShowDamageGraph = ShowDamageGraph.IsChecked;
+            UpdateForm(null, null);
         }
 
         private void ShowRawDPS_Click(object sender, RoutedEventArgs e)
@@ -391,6 +401,7 @@ namespace OverParse
             Properties.Settings.Default.ShowRawDPS = ShowRawDPS.IsChecked;
             Hacks.ShowRawDPS = ShowRawDPS.IsChecked;
             DPSColumn.Header = ShowRawDPS.IsChecked ? "DPS" : "%";
+            UpdateForm(null, null);
         }
 
         private void AlwaysOnTop_Click(object sender, RoutedEventArgs e)
@@ -399,85 +410,143 @@ namespace OverParse
             this.OnActivated(e);
         }
 
-        private void Opacity_0_Click(object sender, RoutedEventArgs e)
+        private void WindowOpacity_0_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Opacity = 0;
-            HandleOpacity();
+            Properties.Settings.Default.WindowOpacity = 0;
+            HandleWindowOpacity();
         }
 
-        private void Opacity_25_Click(object sender, RoutedEventArgs e)
+        private void WindowOpacity_25_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Opacity = .25;
-            HandleOpacity();
+            Properties.Settings.Default.WindowOpacity = .25;
+            HandleWindowOpacity();
         }
 
-        private void Opacity_50_Click(object sender, RoutedEventArgs e)
+        private void WindowOpacity_50_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Opacity = .50;
-            HandleOpacity();
+            Properties.Settings.Default.WindowOpacity = .50;
+            HandleWindowOpacity();
         }
 
-        private void Opacity_75_Click(object sender, RoutedEventArgs e)
+        private void WindowOpacity_75_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Opacity = .75;
-            HandleOpacity();
+            Properties.Settings.Default.WindowOpacity = .75;
+            HandleWindowOpacity();
         }
 
-        private void Opacity_100_Click(object sender, RoutedEventArgs e)
+        private void WindowOpacity_100_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Opacity = 1;
-            HandleOpacity();
+            Properties.Settings.Default.WindowOpacity = 1;
+            HandleWindowOpacity();
         }
 
-        public void HandleOpacity()
+        public void HandleWindowOpacity()
         {
-            TheWindow.Opacity = Properties.Settings.Default.Opacity;
+            TheWindow.Opacity = Properties.Settings.Default.WindowOpacity;
             // ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG
-            Opacity_0.IsChecked = false;
-            Opacity_25.IsChecked = false;
-            Opacity_50.IsChecked = false;
-            Opacity_75.IsChecked = false;
-            Opacity_100.IsChecked = false;
+            WinOpacity_0.IsChecked = false;
+            WinOpacity_25.IsChecked = false;
+            Winopacity_50.IsChecked = false;
+            WinOpacity_75.IsChecked = false;
+            WinOpacity_100.IsChecked = false;
 
-            if (Properties.Settings.Default.Opacity == 0)
+            if (Properties.Settings.Default.WindowOpacity == 0)
             {
-                Opacity_0.IsChecked = true;
+                WinOpacity_0.IsChecked = true;
             }
-            else if (Properties.Settings.Default.Opacity == .25)
+            else if (Properties.Settings.Default.WindowOpacity == .25)
             {
-                Opacity_25.IsChecked = true;
+                WinOpacity_25.IsChecked = true;
             }
-            else if (Properties.Settings.Default.Opacity == .50)
+            else if (Properties.Settings.Default.WindowOpacity == .50)
             {
-                Opacity_50.IsChecked = true;
+                Winopacity_50.IsChecked = true;
             }
-            else if (Properties.Settings.Default.Opacity == .75)
+            else if (Properties.Settings.Default.WindowOpacity == .75)
             {
-                Opacity_75.IsChecked = true;
+                WinOpacity_75.IsChecked = true;
             }
-            else if (Properties.Settings.Default.Opacity == 1)
+            else if (Properties.Settings.Default.WindowOpacity == 1)
             {
-                Opacity_100.IsChecked = true;
+                WinOpacity_100.IsChecked = true;
             }
         }
 
-        private void CompleteOpacity_Click(object sender, RoutedEventArgs e)
+        // HAHAHAHAHAHAHAHAHAHAHAHAHA
+
+        private void ListOpacity_0_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.CompleteOpacity = CompleteOpacity.IsChecked;
-            if (CompleteOpacity.IsChecked)
+            Properties.Settings.Default.ListOpacity = 0;
+            HandleListOpacity();
+        }
+
+        private void ListOpacity_25_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ListOpacity = .25;
+            HandleListOpacity();
+        }
+
+        private void ListOpacity_50_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ListOpacity = .50;
+            HandleListOpacity();
+        }
+
+        private void ListOpacity_75_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ListOpacity = .75;
+            HandleListOpacity();
+        }
+
+        private void ListOpacity_100_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ListOpacity = 1;
+            HandleListOpacity();
+        }
+
+        public void HandleListOpacity()
+        {
+            WinBorderBackground.Opacity = Properties.Settings.Default.ListOpacity;
+            ListOpacity_0.IsChecked = false;
+            ListOpacity_25.IsChecked = false;
+            Listopacity_50.IsChecked = false;
+            ListOpacity_75.IsChecked = false;
+            ListOpacity_100.IsChecked = false;
+
+            if (Properties.Settings.Default.ListOpacity == 0)
             {
-                WinBorderBackground.Opacity = 1;
+                ListOpacity_0.IsChecked = true;
             }
-            else
+            else if (Properties.Settings.Default.ListOpacity == .25)
             {
-                WinBorderBackground.Opacity = .75;
+                ListOpacity_25.IsChecked = true;
             }
+            else if (Properties.Settings.Default.ListOpacity == .50)
+            {
+                Listopacity_50.IsChecked = true;
+            }
+            else if (Properties.Settings.Default.ListOpacity == .75)
+            {
+                ListOpacity_75.IsChecked = true;
+            }
+            else if (Properties.Settings.Default.ListOpacity == 1)
+            {
+                ListOpacity_100.IsChecked = true;
+            }
+        }
+
+        private void HighlightYourDamage_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.HighlightYourDamage = HighlightYourDamage.IsChecked;
+            Hacks.HighlightYourDamage = Properties.Settings.Default.HighlightYourDamage;
+            UpdateForm(null, null);
         }
 
         private void AnonymizeNames_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AnonymizeNames = AnonymizeNames.IsChecked;
             Hacks.AnonymizeNames = Properties.Settings.Default.AnonymizeNames;
+            UpdateForm(null, null);
         }
 
         private void CompactMode_Click(object sender, RoutedEventArgs e)
@@ -514,7 +583,7 @@ namespace OverParse
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            HandleOpacity();
+            HandleWindowOpacity();
             Window window = (Window)sender;
             window.Topmost = AlwaysOnTop.IsChecked;
             if (Properties.Settings.Default.ClickthroughEnabled)
@@ -526,6 +595,9 @@ namespace OverParse
 
         public void UpdateForm(object sender, EventArgs e)
         {
+            if (encounterlog == null)
+                return;
+
             encounterlog.UpdateLog(this, null);
 
             EncounterStatus.Content = encounterlog.logStatus();
@@ -563,8 +635,7 @@ namespace OverParse
                 Combatant reorder = null;
                 foreach (Combatant c in encounterlog.combatants)
                 {
-                    //if (c.Name == "Zanverse")
-                    if (c.Name == "ザンバース")
+                    if (c.isZanverse)
                     {
                         index = encounterlog.combatants.IndexOf(c);
                         reorder = c;
@@ -576,15 +647,17 @@ namespace OverParse
                     encounterlog.combatants.Add(reorder);
                 }
 
-                Combatant.maxShare = 0;
 
+                Combatant.maxShare = 0;
                 foreach (Combatant c in encounterlog.combatants)
+                {
+                    if ((c.isAlly && !c.isZanverse) && c.Damage > Combatant.maxShare)
+                        Combatant.maxShare = c.Damage;
                     if (c.isAlly || !FilterPlayers.IsChecked)
                     {
                         CombatantData.Items.Add(c);
-                        if (c.PercentDPS > Combatant.maxShare)
-                            Combatant.maxShare = c.PercentDPS;
                     }
+                }
 
                 if (Properties.Settings.Default.AutoEndEncounters)
                 {

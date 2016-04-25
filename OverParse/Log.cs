@@ -55,7 +55,7 @@ namespace OverParse
             {
                 Console.WriteLine("Invalid pso2_bin directory, prompting for new one...");
                 //MessageBox.Show("Please select your pso2_bin directory.\n\nThis folder will be inside your PSO2 install folder, which is usually at C:\\PHANTASYSTARONLINE2\\.\n\nIf you installed the game multiple times (e.g. through the torrent), please make sure you pick the right one, or OverParse won't be able to read your logs!", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                MessageBox.Show("pso2_binディレクトリを選択してください。\n\nこのフォルダは、PSO2インストールフォルダの中にあります。\nHDD>Program File>SEGA>PHANTASYSTARONLINE2>", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("pso2_binディレクトリを選択してください。\n\nこのフォルダは、PSO2インストールフォルダの中にあります。\nDrive:/Program File (x86)>SEGA>PHANTASYSTARONLINE2>", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 VistaFolderBrowserDialog oDialog = new VistaFolderBrowserDialog();
                 //oDialog.Description = "Select your pso2_bin folder...";
@@ -131,7 +131,7 @@ namespace OverParse
                 {
                     Console.WriteLine("No damagelog warning");
                     //MessageBox.Show("Your PSO2 folder doesn't contain any damagelogs. This is not an error, just a reminder!\n\nPlease turn on the Damage Parser plugin in PSO2 Tweaker (orb menu > Plugins). OverParse needs this to function. You may also want to update the plugins while you're there.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    MessageBox.Show("PSO2フォルダにdamagelogsがありません。 Damage Parser pluginを有効にしていますか？\n\n有効にしていない場合はPSO2 Tweakerのmenu > PluginsからDamage Parser pluginをonにしてください。 OverParseが情報を取得するために必要です。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("PSO2フォルダにdamagelogsがありません。 Damage Parser pluginを有効化していますか？\n\n有効化していない場合はPSO2 Tweakerのmenu > PluginsからDamage Parser pluginを有効にしてください。 OverParseが情報を取得するために必要です。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     Hacks.DontAsk = true;
                     Properties.Settings.Default.FirstRun = false;
                     Properties.Settings.Default.Save();
@@ -154,7 +154,7 @@ namespace OverParse
                     {
                         Console.WriteLine("Prompting for plugin update");
                         //selfdestructResult = MessageBox.Show("This release of OverParse includes a new version of the parsing plugin. Would you like to update now?\n\nOverParse may behave unpredictably if you use a different version than it expects.", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                        selfdestructResult = MessageBox.Show("このリリースにはプラグインの更新が含まれています OverParseに含まれているバージョンにプラグインを更新しますか？\n\n別のバーションを使用する場合、予期しない動作をすることがあります。", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        selfdestructResult = MessageBox.Show("このリリースにはプラグインの更新が含まれています。 OverParseに含まれているバージョンにプラグインを更新しますか？\n\n別のバーションを使用する場合、予期しない動作をすることがあります。", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     }
                     else
                     {
@@ -452,7 +452,7 @@ namespace OverParse
                             continue;
                         }
 
-                        bool isAuxDamage = false;
+                        // bool isAuxDamage = false;
 
                         if (!instances.Contains(instanceID))
                             instances.Add(instanceID);
@@ -491,8 +491,7 @@ namespace OverParse
                             index = -1;
                             foreach (Combatant x in combatants)
                             {
-                                //if (x.ID == "94857493" && x.Name == "Zanverse")
-                                if (x.ID == "94857493" && x.Name == "ザンバース")
+                                if (x.isZanverse)
                                 {
                                     index = combatants.IndexOf(x);
                                 }
@@ -511,8 +510,13 @@ namespace OverParse
 
                         Combatant source = combatants[index];
 
+                        if (attackID == "2106601422" && Properties.Settings.Default.SeparateZanverse)
+                            source.isZanverse = true;
+
+                        /*
                         if (!source.isAux)
                             source.isAux = isAuxDamage;
+                        */
 
                         source.Damage += hitDamage;
                         newTimestamp = int.Parse(lineTimestamp);
@@ -572,17 +576,15 @@ namespace OverParse
                             filtered++;
                         }
 
-                        //if (x.Name == "Zanverse")
-                        if (x.Name == "ザンバース")
-                        zanverseCompensation = x.DPS;
+                        if (x.isZanverse)
+                            zanverseCompensation = x.DPS;
                     }
 
                     float workingPartyDPS = partyDPS - zanverseCompensation;
 
                     foreach (Combatant x in combatants)
                     {
-                        //if (x.isAlly && x.Name != "Zanverse")
-                        if (x.isAlly && x.Name != "ザンバース")
+                        if (x.isAlly && !x.isZanverse)
                         {
                             x.PercentDPS = (x.DPS / workingPartyDPS * 100);
                         }
