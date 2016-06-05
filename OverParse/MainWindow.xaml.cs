@@ -20,6 +20,7 @@ namespace OverParse
     public partial class MainWindow : Window
     {
         private Log encounterlog;
+        private List<Combatant> lastCombatants = new List<Combatant>();
         public static Dictionary<string, string> skillDict = new Dictionary<string, string>();
         private List<string> sessionLogFilenames = new List<string>();
         private string lastStatus = "";
@@ -104,7 +105,6 @@ namespace OverParse
             Console.WriteLine(ClickthroughMode.IsChecked = Properties.Settings.Default.ClickthroughEnabled);
             Console.WriteLine(LogToClipboard.IsChecked = Properties.Settings.Default.LogToClipboard);
             Console.WriteLine(AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop);
-            Console.WriteLine(SeparateAuxDamage.IsChecked = Properties.Settings.Default.SeparateAuxDamage);
             Console.WriteLine(AutoHideWindow.IsChecked = Properties.Settings.Default.AutoHideWindow);
             Console.WriteLine("Finished applying settings");
 
@@ -301,7 +301,7 @@ namespace OverParse
             if (Properties.Settings.Default.LaunchMethod == "Tweaker")
             {
                 //MessageBox.Show("You can install the parsing plugin from the PSO2 Tweaker's orb menu, under \"Plugins\".\n\nIf you don't use the PSO2 tweaker, use \"Help > Reset OverParse...\" to go through setup again.");
-                MessageBox.Show("PSO2 Tweaker使用者はPSO2 Tweakerの左上の○をクリックし\"Plugins\"から\nプラグインをインストールすることができます。\n\nPSO2 Tweakerを使用しない場合は \"Help > OverParseをリセット...\" からOverParseをリセットし\"PSO2 Tweakerを使用しない\"を選択することで\"強制的にプラグインを更新...\"からインストールすることができます。");
+                MessageBox.Show("PSO2 Tweaker使用者はPSO2 Tweakerの左上の○をクリックし\"Plugins\"から\nプラグインをインストールすることができます。\n\nPSO2 Tweakerを使用しない場合は \"Help > OverParseをリセット...\" からOverParseをリセットし\"PSO2 Tweakerを使用しない\"を選択することで\"プラグインを再インストール...\"からインストールすることができます。");
                 return;
             }
             encounterlog.UpdatePlugin(Properties.Settings.Default.Path);
@@ -379,11 +379,6 @@ namespace OverParse
             Properties.Settings.Default.AutoHideWindow = AutoHideWindow.IsChecked;
         }
 
-        private void SeparateAuxDamage_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.SeparateAuxDamage = SeparateAuxDamage.IsChecked;
-        }
-
         private void ClickthroughToggle(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.ClickthroughEnabled = ClickthroughMode.IsChecked;
@@ -392,14 +387,12 @@ namespace OverParse
         private void ShowDamageGraph_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.ShowDamageGraph = ShowDamageGraph.IsChecked;
-            Hacks.ShowDamageGraph = ShowDamageGraph.IsChecked;
             UpdateForm(null, null);
         }
 
         private void ShowRawDPS_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.ShowRawDPS = ShowRawDPS.IsChecked;
-            Hacks.ShowRawDPS = ShowRawDPS.IsChecked;
             DPSColumn.Header = ShowRawDPS.IsChecked ? "DPS" : "%";
             UpdateForm(null, null);
         }
@@ -538,14 +531,12 @@ namespace OverParse
         private void HighlightYourDamage_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.HighlightYourDamage = HighlightYourDamage.IsChecked;
-            Hacks.HighlightYourDamage = Properties.Settings.Default.HighlightYourDamage;
             UpdateForm(null, null);
         }
 
         private void AnonymizeNames_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AnonymizeNames = AnonymizeNames.IsChecked;
-            Hacks.AnonymizeNames = Properties.Settings.Default.AnonymizeNames;
             UpdateForm(null, null);
         }
 
@@ -624,41 +615,34 @@ namespace OverParse
                 lastStatus = encounterlog.logStatus();
             }
 
+            List<Combatant> workingList = encounterlog.running ? encounterlog.combatants : lastCombatants;
+
+            CombatantData.Items.Clear();
+            workingList.RemoveAll(c => c.isZanverse);
+
+            if (Properties.Settings.Default.SeparateZanverse)
+            {
+                int totalZanverse = workingList.Where(c => c.isAlly == true).Sum(x => x.ZanverseDamage);
+                if (totalZanverse > 0)
+                {
+                    //Combatant zanverseHolder = new Combatant("99999999", "Zanverse");
+                    Combatant zanverseHolder = new Combatant("99999999", "ザンバース");
+                    zanverseHolder.Damage = totalZanverse;
+                    workingList.Add(zanverseHolder);
+                }
+            }
+
+            Combatant.maxShare = 0;
+            foreach (Combatant c in workingList)
+            {
+                if ((c.isAlly) && c.ReadDamage > Combatant.maxShare)
+                    Combatant.maxShare = c.ReadDamage;
+                if (c.isAlly || c.isZanverse || !FilterPlayers.IsChecked)
+                    CombatantData.Items.Add(c);
+            }
+
             if (encounterlog.running)
             {
-                SeparateZanverse.IsEnabled = false;
-                SeparateAuxDamage.IsEnabled = false;
-
-                CombatantData.Items.Clear();
-
-                int index = -1; // there's probably a way better way of doing this, maybe someday i'll learn LINQ
-                Combatant reorder = null;
-                foreach (Combatant c in encounterlog.combatants)
-                {
-                    if (c.isZanverse)
-                    {
-                        index = encounterlog.combatants.IndexOf(c);
-                        reorder = c;
-                    }
-                }
-                if (index != -1)
-                {
-                    encounterlog.combatants.RemoveAt(index);
-                    encounterlog.combatants.Add(reorder);
-                }
-
-
-                Combatant.maxShare = 0;
-                foreach (Combatant c in encounterlog.combatants)
-                {
-                    if ((c.isAlly && !c.isZanverse) && c.Damage > Combatant.maxShare)
-                        Combatant.maxShare = c.Damage;
-                    if (c.isAlly || !FilterPlayers.IsChecked)
-                    {
-                        CombatantData.Items.Add(c);
-                    }
-                }
-
                 if (Properties.Settings.Default.AutoEndEncounters)
                 {
                     int unixTimestamp = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
@@ -669,6 +653,7 @@ namespace OverParse
                     }
                 }
             }
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -714,8 +699,6 @@ namespace OverParse
             UpdateForm(null, null);
             Properties.Settings.Default.AutoEndEncounters = temp;
             Console.WriteLine("Reinitializing log");
-            SeparateZanverse.IsEnabled = true;
-            SeparateAuxDamage.IsEnabled = true;
             lastStatus = "";
             encounterlog = new Log(Properties.Settings.Default.Path);
         }
@@ -746,9 +729,9 @@ namespace OverParse
             {
                 encounterlog.WriteClipboard();
             }
+            Console.WriteLine("Saving last combatant list");
+            lastCombatants = encounterlog.combatants;
             Console.WriteLine("Reinitializing log");
-            SeparateZanverse.IsEnabled = true;
-            SeparateAuxDamage.IsEnabled = true;
             encounterlog = new Log(Properties.Settings.Default.Path);
         }
 
@@ -773,6 +756,7 @@ namespace OverParse
         private void SeparateZanverse_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.SeparateZanverse = SeparateZanverse.IsChecked;
+            UpdateForm(null, null);
         }
 
         private void SetEncounterTimeout_Click(object sender, RoutedEventArgs e)

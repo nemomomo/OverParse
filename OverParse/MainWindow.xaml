@@ -83,7 +83,7 @@
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="Automatically end encounters" Click="AutoEndEncounters_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="AutoEndEncounters" IsCheckable="True" IsChecked="True" Header="計測を自動でリセット" Click="AutoEndEncounters_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="Set encounter timeout..." Click="SetEncounterTimeout_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="戦闘時間間隔の設定…" Click="SetEncounterTimeout_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" x:Name="SetEncounterTimeout" Header="戦闘時間間隔の設定..." Click="SetEncounterTimeout_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="LogToClipboard" IsCheckable="True" IsChecked="True" Header="Automatically copy to clipboard" Click="LogToClipboard_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="LogToClipboard" IsCheckable="True" IsChecked="True" Header="自動でクリップボードに出力" Click="LogToClipboard_Click"/>
                                 <Separator />
@@ -101,7 +101,6 @@
                                 <MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="%表示をDPSに変更" Click="ShowRawDPS_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="Show Zanverse damage separately" Click="SeparateZanverse_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Header="ザンバースのダメージを分けて表示" Click="SeparateZanverse_Click"/>
-                                <MenuItem Style="{StaticResource submenu}" x:Name="SeparateAuxDamage" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="AISと機銃のダメージを分けて表示" Click="SeparateAuxDamage_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Show damage graph" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="ダメージグラフを表示" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Anonymize names" x:Name="AnonymizeNames" Click="AnonymizeNames_Click"/>-->
@@ -113,22 +112,22 @@
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Highlight your damage" x:Name="HighlightYourDamage" Click="HighlightYourDamage_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="自分をハイライト表示" x:Name="HighlightYourDamage" Click="HighlightYourDamage_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Window opacity">-->
-                                <MenuItem Style="{StaticResource submenu}" Header="ウィンドウの透過率">
+                                <MenuItem Style="{StaticResource submenu}" Header="ウィンドウ透過度">
                                     <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_0" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Transparent" Click="WindowOpacity_0_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_25" IsCheckable="True" IsChecked="False" Header="25%" Click="WindowOpacity_25_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Winopacity_50" IsCheckable="True" IsChecked="False" Header="50%" Click="WindowOpacity_50_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_75" IsCheckable="True" IsChecked="True" Header="75%" Click="WindowOpacity_75_Click" />
                                     <!--<MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_100" IsCheckable="True" IsChecked="False" Header="Opaque" Click="WindowOpacity_100_Click" />-->
-                                    <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_100" IsCheckable="True" IsChecked="False" Header="不透明" Click="WindowOpacity_100_Click" />
+                                    <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_100" IsCheckable="True" IsChecked="False" Header="透過しない" Click="WindowOpacity_100_Click" />
                                 </MenuItem>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="List opacity">-->
-                                <MenuItem Style="{StaticResource submenu}" Header="背景の透過率">
+                                <MenuItem Style="{StaticResource submenu}" Header="背景の透過度">
                                     <MenuItem Style="{StaticResource submenu}" x:Name="ListOpacity_0" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Transparent" Click="ListOpacity_0_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="ListOpacity_25" IsCheckable="True" IsChecked="False" Header="25%" Click="ListOpacity_25_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="Listopacity_50" IsCheckable="True" IsChecked="False" Header="50%" Click="ListOpacity_50_Click" />
                                     <MenuItem Style="{StaticResource submenu}" x:Name="ListOpacity_75" IsCheckable="True" IsChecked="True" Header="75%" Click="ListOpacity_75_Click" />
                                     <!--<MenuItem Style="{StaticResource submenu}" x:Name="ListOpacity_100" IsCheckable="True" IsChecked="False" Header="Opaque" Click="ListOpacity_100_Click" />-->
-                                    <MenuItem Style="{StaticResource submenu}" x:Name="ListOpacity_100" IsCheckable="True" IsChecked="False" Header="不透明" Click="ListOpacity_100_Click" />
+                                    <MenuItem Style="{StaticResource submenu}" x:Name="ListOpacity_100" IsCheckable="True" IsChecked="False" Header="透過しない" Click="ListOpacity_100_Click" />
                                 </MenuItem>
                                 <Separator />
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Always on top" InputGestureText="Ctrl+Shift+A"  x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>-->
@@ -139,12 +138,9 @@
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="非アクティブ時にクリックを無効" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Visibility="Collapsed" Background="Transparent" Header="Debug">
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" Header="偽の値を生成する" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" Header="うぃんどうすていたす" x:Name="WindowStats" Click="WindowStats_Click"/>
-                                <!--<MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" Header="ろぐのふぁいるねーむ" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="Generate fake entries" x:Name="GenerateFakeEntries" Click="GenerateFakeEntries_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="Current log filename" x:Name="CurrentLogFilename" Click="CurrentLogFilename_Click"/>
                             </MenuItem>
                             <MenuItem Style="{StaticResource topmenu}" Background="Transparent" Header="Help">
                                 <MenuItem Style="{StaticResource submenu}" Header="About" x:Name="About" Click="About_Click"/>
@@ -152,7 +148,7 @@
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Reselect pso2__bin..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="pso2__binを再選択..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Force plugin update..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" Header="強制的にプラグインを更新..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" Header="プラグインを再インストール..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" Header="Reset OverParse..." x:Name="Reset" Click="ResetOverParse"/>-->
                                 <MenuItem Style="{StaticResource submenu}" Header="OverParseをリセット..." x:Name="Reset" Click="ResetOverParse"/>
                                 <Separator />
@@ -253,7 +249,7 @@
                             </LinearGradientBrush>
                         </Rectangle.Fill>
                     </Rectangle>
-                    <Button x:Name="button" Click="CloseButton_Click" Content="X" FontWeight="Normal" HorizontalAlignment="Right" Width="26" Height="16" BorderThickness="0" Margin="2" Padding="0,-4,0,0" Background="#F0EA5E39" Foreground="#FFDDDDDD" FontFamily="Tahoma"/>
+                    <Button x:Name="button" Click="CloseButton_Click" Content="X" FontWeight="Normal" HorizontalAlignment="Right" Width="26" Height="16" BorderThickness="0" Margin="2" Padding="0,-4,0,0" Background="#F0EA5E39" Foreground="#FFDDDDDD" FontFamily="Tahoma" FontSize="10.667"/>
                 </Grid>
             </Border>
         </Border>
