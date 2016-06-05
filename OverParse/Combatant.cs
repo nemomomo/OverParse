@@ -15,16 +15,36 @@ namespace OverParse
         public string Name { get; set; }
         public int MaxHitNum;
         public string MaxHitID;
-        public bool isZanverse;
+        public int ZanverseDamage;
         public bool isAux;
         public float DPS;
         public float PercentDPS;
         public List<Attack> Attacks;
         Color green = Color.FromArgb(160, 32, 130, 32);
 
+        public bool isZanverse
+        {
+            get
+            {
+                if (ID == "99999999")
+                    return true;
+                return false;
+            }
+        }
+
         bool isYou()
         {
             return (ID == Hacks.currentPlayerID);
+        }
+
+        public int ReadDamage
+        {
+            get
+            {
+                if (Properties.Settings.Default.SeparateZanverse)
+                    return Damage - ZanverseDamage;
+                return Damage;
+            }
         }
 
         public string AnonymousName() {
@@ -38,7 +58,7 @@ namespace OverParse
         {
             get
             {
-                if (Hacks.AnonymizeNames && isAlly)
+                if (Properties.Settings.Default.AnonymizeNames && isAlly)
                     return AnonymousName();
                 return Name;
             }
@@ -49,13 +69,13 @@ namespace OverParse
         {
             get
             {
-                if (Hacks.ShowDamageGraph && (isAlly && !isZanverse))
+                if (Properties.Settings.Default.ShowDamageGraph && (isAlly))
                 {
                     return generateBarBrush(Color.FromArgb(200, 65, 112, 166), new Color());
                 }
                 else
                 {
-                    if (isYou() && Hacks.HighlightYourDamage)
+                    if (isYou() && Properties.Settings.Default.HighlightYourDamage)
                         return new SolidColorBrush(green);
                     return new SolidColorBrush(new Color());
                 }
@@ -67,13 +87,13 @@ namespace OverParse
         {
             get
             {
-                if (Hacks.ShowDamageGraph && (isAlly && !isZanverse))
+                if (Properties.Settings.Default.ShowDamageGraph && (isAlly && !isZanverse))
                 {
                     return generateBarBrush(Color.FromArgb(140, 65, 112, 166), Color.FromArgb(64, 16, 16, 16));
                 }
                 else
                 {
-                    if (isYou() && Hacks.HighlightYourDamage)
+                    if (isYou() && Properties.Settings.Default.HighlightYourDamage)
                         return new SolidColorBrush(green);
                     return new SolidColorBrush(Color.FromArgb(64, 16, 16, 16));
                 }
@@ -82,18 +102,18 @@ namespace OverParse
 
         LinearGradientBrush generateBarBrush(Color c, Color c2)
         {
-            if (!Hacks.ShowDamageGraph)
+            if (!Properties.Settings.Default.ShowDamageGraph)
                 c = new Color();
 
-            if (isYou() && Hacks.HighlightYourDamage)
+            if (isYou() && Properties.Settings.Default.HighlightYourDamage)
                 c = green;
 
             LinearGradientBrush lgb = new LinearGradientBrush();
             lgb.StartPoint = new System.Windows.Point(0, 0);
             lgb.EndPoint = new System.Windows.Point(1, 0);
             lgb.GradientStops.Add(new GradientStop(c, 0));
-            lgb.GradientStops.Add(new GradientStop(c, Damage / maxShare));
-            lgb.GradientStops.Add(new GradientStop(c2, Damage / maxShare));
+            lgb.GradientStops.Add(new GradientStop(c, ReadDamage / maxShare));
+            lgb.GradientStops.Add(new GradientStop(c2, ReadDamage / maxShare));
             lgb.GradientStops.Add(new GradientStop(c2, 1));
             lgb.SpreadMethod = GradientSpreadMethod.Repeat;
             return lgb;
@@ -105,26 +125,9 @@ namespace OverParse
         {
             get
             {
-                if (isAux)
+                if (int.Parse(ID) >= 10000000 && !isZanverse)
                     return true;
-
-                string[] SuAttacks = { "487482498", "2785585589", "639929291" };
-                if (int.Parse(ID) >= 10000000)
-                {
-                    return true;
-                }
-
-                bool allied = false;
-                foreach (Attack a in Attacks)
-                {
-                    if (SuAttacks.Contains(a.ID))
-                    {
-                        allied = true;
-                        return allied;
-                    }
-                }
-
-                return allied;
+                return false;
             }
         }
 
@@ -132,6 +135,9 @@ namespace OverParse
         {
             get
             {
+                if (isZanverse)
+                    return "--";
+
                 string attack = "Unknown";
                 if (MainWindow.skillDict.ContainsKey(MaxHitID))
                 {
@@ -146,13 +152,13 @@ namespace OverParse
         {
             get
             {
-                if (Hacks.ShowRawDPS)
+                if (Properties.Settings.Default.ShowRawDPS)
                 {
                     return FormatNumber(DPS);
                 }
                 else
                 {
-                    if (PercentDPS < -.5)
+                    if (PercentDPS < -.5 || isZanverse)
                     {
                         return "--";
                     }
@@ -184,7 +190,7 @@ namespace OverParse
         {
             get
             {
-                return Damage.ToString("N0");
+                return ReadDamage.ToString("N0");
             }
         }
 
@@ -197,7 +203,6 @@ namespace OverParse
             MaxHitNum = 0;
             MaxHitID = "none";
             DPS = 0;
-            isZanverse = false;
             PercentDPS = -1;
             isAux = false;
             Attacks = new List<Attack>();

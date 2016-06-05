@@ -27,8 +27,6 @@ namespace OverParse
 
         public Log(string attemptDirectory)
         {
-      
-
             valid = false;
             notEmpty = false;
             running = false;
@@ -142,7 +140,7 @@ namespace OverParse
                     {
                         Console.WriteLine("Prompting for initial plugin install");
                         //selfdestructResult = MessageBox.Show("OverParse needs a Tweaker plugin to recieve its damage information.\n\nThe plugin can be installed without the Tweaker, but it won't be automatically updated, and I can't provide support for this method.\n\nDo you want to try to manually install the Damage Parser plugin?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                        selfdestructResult = MessageBox.Show("OverParseは、ダメージの情報を取得するためにPSO2 Tweakerのプラグインを必要とします。\n\nプラグインは、PSO2 Tweakerを使用しなくてもインストールすることができますが、OverParseはプラグインの更新をチェックすることができないためプラグインが更新された場合、自動的に更新されることはありません。\n\n手動でDamage Parser pluginをインストールしますか?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        selfdestructResult = MessageBox.Show("OverParseは、ダメージの情報を取得するためにPSO2 Tweakerのプラグインを必要とします。\n\nプラグインは、PSO2 Tweakerを使用しなくてもインストールすることができますが、OverParseはプラグインの更新をチェックすることができないためプラグインが更新された場合、自動的に更新されることはありません。\n\nDamage Parser pluginをインストールしますか?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     }
 
                     if (selfdestructResult == MessageBoxResult.No && !pluginsExist)
@@ -204,7 +202,7 @@ namespace OverParse
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\PSO2DamageDump.dll", attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll", true);
                 Properties.Settings.Default.InstalledPluginVersion = pluginVersion;
                 //MessageBox.Show("Setup complete! A few files have been copied to your pso2_bin folder.\n\nIf PSO2 is running right now, you'll need to close it before the changes can take effect.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                MessageBox.Show("セットアップが完了しました！\nいくつかのファイルは、pso2_binフォルダにコピーされています。\n\nPSO2を起動している場合、変更を有効にするには、一度PSO2を終了してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("セットアップが完了しました！\nいくつかのファイルが、pso2_binフォルダにコピーされています。\n\nPSO2を起動している場合、変更を有効にするには、一度PSO2を終了してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                 Console.WriteLine("Plugin install successful");
                 return true;
             }
@@ -276,43 +274,66 @@ namespace OverParse
                 foreach (Combatant c in combatants)
                 {
                     if (c.isAlly)
-                        log += $"{c.Name} | {c.Damage.ToString("N0")} dmg | {c.DPSReadout} contrib | {c.DPS} DPS | Max: {c.MaxHit}" + Environment.NewLine;
+                        log += $"{c.Name} | {c.ReadDamage.ToString("N0")} dmg | {c.DPSReadout} contrib | {c.DPS} DPS | Max: {c.MaxHit}" + Environment.NewLine;
+                    if (c.isZanverse)
+                        log += $"{c.Name} | {c.ReadDamage.ToString("N0")} dmg | -- contrib | -- DPS | Max: --" + Environment.NewLine; // messy
                 }
 
                 log += Environment.NewLine + Environment.NewLine;
 
                 foreach (Combatant c in combatants)
                 {
-                    if (c.isAlly)
+                    if (c.isAlly || c.isZanverse)
                     {
-                        string header = $"###### {c.Name} - {c.Damage.ToString("N0")} dmg ({c.DPSReadout}) ######";
-                        // string line = "".PadLeft(header.Length, '-');
+                        string header = $"###### {c.Name} - {c.ReadDamage.ToString("N0")} dmg ({c.DPSReadout}) ######";
                         log += header + Environment.NewLine + Environment.NewLine;
 
                         List<string> attackNames = new List<string>();
-
-                        foreach (Attack a in c.Attacks)
-                        {
-                            if (MainWindow.skillDict.ContainsKey(a.ID))
-                                a.ID = MainWindow.skillDict[a.ID]; // these are getting disposed anyway, no 1 cur
-                            if (!attackNames.Contains(a.ID))
-                                attackNames.Add(a.ID);
-                        }
-
                         List<Tuple<string, List<int>>> attackData = new List<Tuple<string, List<int>>>();
 
-                        foreach (string s in attackNames)
+                        if (c.isZanverse && Properties.Settings.Default.SeparateZanverse)
                         {
-                            Console.WriteLine(s);
-                            List<int> matchingAttacks = c.Attacks.Where(a => a.ID == s).Select(a => a.Damage).ToList();
-                            attackData.Add(new Tuple<string, List<int>>(s, matchingAttacks));
+                            //Console.WriteLine("ZANVERSE BREAKDOWN");
+                            Console.WriteLine("ザンバースの内訳");
+                            foreach (Combatant c2 in combatants)
+                            {
+                                if (c2.ZanverseDamage > 0)
+                                    attackNames.Add(c2.ID);
+                            }
+
+                            foreach (string s in attackNames)
+                            {
+                                Console.WriteLine(s);
+                                Combatant targetCombatant = combatants.First(x => x.ID == s);
+                                List <int> matchingAttacks = targetCombatant.Attacks.Where(a => a.ID == "2106601422").Select(a => a.Damage).ToList();
+                                attackData.Add(new Tuple<string, List<int>>(targetCombatant.Name, matchingAttacks));
+                            }
+
+                        } else
+                        {
+                            foreach (Attack a in c.Attacks)
+                            {
+                                if (a.ID == "2106601422" && Properties.Settings.Default.SeparateZanverse)
+                                    continue;
+                                if (MainWindow.skillDict.ContainsKey(a.ID))
+                                    a.ID = MainWindow.skillDict[a.ID]; // these are getting disposed anyway, no 1 cur
+                                if (!attackNames.Contains(a.ID))
+                                    attackNames.Add(a.ID);
+                            }
+
+                            foreach (string s in attackNames)
+                            {
+                                Console.WriteLine(s);
+                                List<int> matchingAttacks = c.Attacks.Where(a => a.ID == s).Select(a => a.Damage).ToList();
+                                attackData.Add(new Tuple<string, List<int>>(s, matchingAttacks));
+                            }
                         }
 
                         attackData = attackData.OrderByDescending(x => x.Item2.Sum()).ToList();
 
                         foreach (var i in attackData)
                         {
-                            double percent = i.Item2.Sum() * 100d / c.Damage;
+                            double percent = i.Item2.Sum() * 100d / c.ReadDamage;
                             string spacer = (percent >= 9) ? "" : " ";
 
                             string paddedPercent = percent.ToString("00.00").Substring(0, 5);
@@ -349,7 +370,7 @@ namespace OverParse
         {
             if (!valid)
             {
-                return "USER SHOULD PROBABLY NEVER SEE THIS";
+                return "こんなログ見ちゃいけません!";
             }
 
             if (!notEmpty)
@@ -434,8 +455,6 @@ namespace OverParse
                             continue;
                         }
 
-                        // bool isAuxDamage = false;
-
                         if (!instances.Contains(instanceID))
                             instances.Add(instanceID);
 
@@ -443,45 +462,13 @@ namespace OverParse
                             continue;
                         if (sourceID == "0" || attackID == "0")
                             continue;
-                        /*
-                        if (sourceName.Contains("|"))
-                        {
-                            string[] separate = sourceName.Split('|');
-                            if (Properties.Settings.Default.SeparateAuxDamage)
-                                sourceName = separate[0] + " (Aux)";
-                            else
-                                sourceName = separate[0];
-                            isAuxDamage = true;
-                        }
-                        */
+
                         foreach (Combatant x in combatants)
                         {
                             if (x.ID == sourceID)
                             {
                                 index = combatants.IndexOf(x);
                             }
-                            /*
-                            if (x.Name == sourceName)
-                            {
-                                if (!(!isAuxDamage && !x.isAux))
-                                    index = combatants.IndexOf(x);
-                            } */
-                        }
-
-                        if (attackID == "2106601422" && Properties.Settings.Default.SeparateZanverse)
-                        {
-                            index = -1;
-                            foreach (Combatant x in combatants)
-                            {
-                                if (x.isZanverse)
-                                {
-                                    index = combatants.IndexOf(x);
-                                }
-                            }
-
-                            sourceID = "94857493";
-                            //sourceName = "Zanverse";
-                            sourceName = "ザンバース";
                         }
 
                         if (index == -1)
@@ -492,13 +479,8 @@ namespace OverParse
 
                         Combatant source = combatants[index];
 
-                        if (attackID == "2106601422" && Properties.Settings.Default.SeparateZanverse)
-                            source.isZanverse = true;
-
-                        /*
-                        if (!source.isAux)
-                            source.isAux = isAuxDamage;
-                        */
+                        if (attackID == "2106601422")
+                            source.ZanverseDamage += hitDamage;
 
                         source.Damage += hitDamage;
                         newTimestamp = int.Parse(lineTimestamp);
@@ -519,7 +501,7 @@ namespace OverParse
                     }
                 }
 
-                combatants.Sort((x, y) => y.Damage.CompareTo(x.Damage));
+                combatants.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
 
                 if (startTimestamp != 0)
                 {
@@ -549,7 +531,7 @@ namespace OverParse
                     {
                         if (x.isAlly)
                         {
-                            float dps = x.Damage / (float)(newTimestamp - startTimestamp);
+                            float dps = x.ReadDamage / (float)(newTimestamp - startTimestamp);
                             x.DPS = dps;
                             partyDPS += dps;
                         }
@@ -557,16 +539,13 @@ namespace OverParse
                         {
                             filtered++;
                         }
-
-                        if (x.isZanverse)
-                            zanverseCompensation = x.DPS;
                     }
 
                     float workingPartyDPS = partyDPS - zanverseCompensation;
 
                     foreach (Combatant x in combatants)
                     {
-                        if (x.isAlly && !x.isZanverse)
+                        if (x.isAlly)
                         {
                             x.PercentDPS = (x.DPS / workingPartyDPS * 100);
                         }
