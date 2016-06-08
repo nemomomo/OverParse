@@ -617,6 +617,10 @@ namespace OverParse
 
             List<Combatant> workingList = encounterlog.running ? encounterlog.combatants : lastCombatants;
 
+            //force resort if log isn't active
+            if (!encounterlog.running)
+                    workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
+
             CombatantData.Items.Clear();
             workingList.RemoveAll(c => c.isZanverse);
 
@@ -756,6 +760,11 @@ namespace OverParse
         private void SeparateZanverse_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.SeparateZanverse = SeparateZanverse.IsChecked;
+            UpdateForm(null, null);
+        }
+
+        private void FilterPlayers_Click(object sender, RoutedEventArgs e)
+        {
             UpdateForm(null, null);
         }
 
