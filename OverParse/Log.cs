@@ -293,8 +293,7 @@ namespace OverParse
 
                         if (c.isZanverse && Properties.Settings.Default.SeparateZanverse)
                         {
-                            //Console.WriteLine("ZANVERSE BREAKDOWN");
-                            Console.WriteLine("ザンバースの内訳");
+                            Console.WriteLine("ZANVERSE BREAKDOWN");
                             foreach (Combatant c2 in combatants)
                             {
                                 if (c2.ZanverseDamage > 0)
@@ -370,7 +369,7 @@ namespace OverParse
         {
             if (!valid)
             {
-                return "こんなログ見ちゃいけません!";
+                return "USER SHOULD PROBABLY NEVER SEE THIS";
             }
 
             if (!notEmpty)
@@ -392,7 +391,6 @@ namespace OverParse
             for (int i = 0; i <= 12; i++)
             {
                 Combatant temp = new Combatant("1000000" + i.ToString(), "TestPlayer_" + random.Next(0, 99).ToString());
-                totalDPS += temp.DPS = random.Next(0, 10000000);
                 temp.Damage = random.Next(0, 1000000);
                 temp.MaxHitNum = random.Next(0, 1000000);
                 temp.MaxHitID = "2368738938";
@@ -406,7 +404,6 @@ namespace OverParse
             {
                 Combatant temp = new Combatant(i.ToString(), "TestEnemy_" + i.ToString());
                 temp.PercentDPS = -1;
-                temp.DPS = random.Next(0, 1000000);
                 temp.Damage = random.Next(0, 10000000);
                 temp.MaxHitNum = random.Next(0, 1000000);
                 temp.MaxHitID = "1612949165";
@@ -510,54 +507,13 @@ namespace OverParse
 
                 if (startTimestamp != 0 && newTimestamp != startTimestamp)
                 {
-                    int elapsed = newTimestamp - startTimestamp;
-                    float partyDPS = 0;
-                    float zanverseCompensation = 0;
-                    int filtered = 0;
-                    TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
-                    string timer = timespan.ToString(@"mm\:ss");
-                    encounterData = $"{timer}";
-
-                    if (Properties.Settings.Default.CompactMode)
-                    {
-                        foreach (Combatant c in combatants)
-                        {
-                            if (c.Name == "YOU")
-                                encounterData += $" - MAX: {c.MaxHitNum.ToString("N0")}";
-                        }
-                    }
-
                     foreach (Combatant x in combatants)
                     {
-                        if (x.isAlly)
-                        {
-                            float dps = x.ReadDamage / (float)(newTimestamp - startTimestamp);
-                            x.DPS = dps;
-                            partyDPS += dps;
-                        }
-                        else
-                        {
-                            filtered++;
-                        }
+                        if (x.isAlly || x.isZanverse)
+                            x.ActiveTime = (newTimestamp - startTimestamp);
                     }
-
-                    float workingPartyDPS = partyDPS - zanverseCompensation;
-
-                    foreach (Combatant x in combatants)
-                    {
-                        if (x.isAlly)
-                        {
-                            x.PercentDPS = (x.DPS / workingPartyDPS * 100);
-                        }
-                        else
-                        {
-                            x.PercentDPS = -1;
-                        }
-                    }
-
-                    if (partyDPS > 0)
-                        encounterData += $" - {partyDPS.ToString("N2")} DPS";
                 }
+
             }
         }
 
