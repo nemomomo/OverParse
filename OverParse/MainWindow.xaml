@@ -55,7 +55,8 @@
         </Style>
         <Style TargetType="Menu">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="FontFamily" Value="Segoe UI" />
+            <!--<Setter Property="FontFamily" Value="Segoe UI" />-->
+            <Setter Property="FontFamily" Value="Meiryo UI" />
             <Setter Property="Padding" Value="0,0,0,0"/>
             <Setter Property="Margin" Value="0,0,0,0"/>
         </Style>
@@ -111,7 +112,7 @@
                                 </MenuItem>
                                 <Separator />
                                 <!--<MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="Show raw DPS" Click="ShowRawDPS_Click"/>-->
-                                <MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="%表示をDPSに変更" Click="ShowRawDPS_Click"/>
+                                <MenuItem Style="{StaticResource submenu}" x:Name="ShowRawDPS" IsCheckable="True" IsChecked="False" Header="DPSを表示" Click="ShowRawDPS_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Show damage graph" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>-->
                                 <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="ダメージグラフを表示" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
                                 <!--<MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Anonymize names" x:Name="AnonymizeNames" Click="AnonymizeNames_Click"/>-->
@@ -180,7 +181,8 @@
                         </Menu>
                     </DockPanel>
 
-                    <ListView x:Name="CombatantData" AlternationCount="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="-2,0,0,0" BorderThickness="0" Padding="0" FontSize="10.667" FontFamily="Segoe UI Semibold">
+                    <!--<ListView x:Name="CombatantData" AlternationCount="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="-2,0,0,0" BorderThickness="0" Padding="0" FontSize="10.667" FontFamily="Segoe UI Semibold">-->
+                    <ListView x:Name="CombatantData" AlternationCount="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="-2,0,0,0" BorderThickness="0" Padding="0" FontSize="10.667" FontFamily="Meiryo UI">
                         <ListView.Background>
                             <SolidColorBrush Opacity="0.0" Color="#FF101010"/>
                         </ListView.Background>
