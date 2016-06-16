@@ -277,10 +277,8 @@ namespace OverParse
 
                 foreach (Combatant c in combatants)
                 {
-                    if (c.isAlly)
-                        log += $"{c.Name} | {c.ReadDamage.ToString("N0")} dmg | {c.DPSReadout} contrib | {c.DPS} DPS | Max: {c.MaxHit}" + Environment.NewLine;
-                    if (c.isZanverse)
-                        log += $"{c.Name} | {c.ReadDamage.ToString("N0")} dmg | -- contrib | -- DPS | Max: --" + Environment.NewLine; // messy
+                    if (c.isAlly || c.isZanverse)
+                        log += $"{c.Name} | {c.ReadDamage.ToString("N0")} dmg | {c.PercentReadDPSReadout} contrib | {c.DPS} DPS | Max: {c.MaxHit}" + Environment.NewLine;
                 }
 
                 log += Environment.NewLine + Environment.NewLine;
@@ -289,7 +287,7 @@ namespace OverParse
                 {
                     if (c.isAlly || c.isZanverse)
                     {
-                        string header = $"###### {c.Name} - {c.ReadDamage.ToString("N0")} dmg ({c.DPSReadout}) ######";
+                        string header = $"###### {c.Name} - {c.ReadDamage.ToString("N0")} dmg ({c.PercentReadDPSReadout}) ######";
                         log += header + Environment.NewLine + Environment.NewLine;
 
                         List<string> attackNames = new List<string>();
