@@ -39,7 +39,7 @@ namespace OverParse
         {
             InitializeComponent();
 
-            //this.Dispatcher.UnhandledException += Panic;
+            this.Dispatcher.UnhandledException += Panic;
 
             try { Directory.CreateDirectory("Logs"); }
             catch
@@ -48,20 +48,6 @@ namespace OverParse
                 MessageBox.Show("OverParseは、フォルダへの書き込みアクセス権を持っていないためログやスキルマッピングの更新を保存することができません。これは通常時、プログラムファイルから実行したときに発生します。\n\n管理者としてOverParseを実行するか、他のどこかに移動してください。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
-
-            /* ABANDON ALL HOPE YE WHO ENTER HERE
-            string pluginURL = "http://107.170.16.100/Plugins/PSO2DamageDump.dll";
-            HttpWebRequest dateRequest = (HttpWebRequest)WebRequest.Create(pluginURL);
-            dateRequest.Method = "HEAD";
-            HttpWebResponse resp = (HttpWebResponse)dateRequest.GetResponse();
-            DateTime remoteDate = resp.LastModified.ToUniversalTime();
-            DateTime localDate = File.GetLastWriteTimeUtc(@"Resources/PSO2DamageDump.dll");
-            if (localDate < remoteDate)
-            {
-                MessageBox.Show("local file's old");
-                WebClient webClient = new WebClient();
-                webClient.DownloadFile(pluginURL, @"Resources/PSO2DamageDump.dll");
-            } */
 
             Directory.CreateDirectory("Debug");
 
